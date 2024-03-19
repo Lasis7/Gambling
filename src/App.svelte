@@ -1,6 +1,13 @@
 <script>
   import Heading from './lib/Heading.svelte';
   import Navbar from './lib/Navbar.svelte';
+
+  let modalVisible = false;
+
+  //Brings out the modal when you first press the play-button.
+  const playStart = () => {
+    modalVisible = true;
+  };
 </script>
 
 <Heading heading="Pallokeno" />
@@ -8,7 +15,7 @@
 <Navbar />
 
 <div class="view">
-  <p>placeholder text</p>
+  <button on:click={playStart}>Play</button>
 </div>
 
 <style>
