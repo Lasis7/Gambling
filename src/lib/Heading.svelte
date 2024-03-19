@@ -9,7 +9,8 @@
     font-size: 3em;
     color: blueviolet;
     font-family: 'Times New Roman', Times, serif;
-    background-color: black;
+    background-color: rgb(255, 255, 255);
     text-align: center;
+    border-radius: 50px;
   }
 </style>
