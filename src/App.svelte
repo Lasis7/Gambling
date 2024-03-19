@@ -1,6 +1,7 @@
 <script>
   import Heading from './lib/Heading.svelte';
   import Navbar from './lib/Navbar.svelte';
+  import Modal from './lib/Modal.svelte';
 
   let modalVisible = false;
 
@@ -17,6 +18,10 @@
 <div class="view">
   <button on:click={playStart}>Play</button>
 </div>
+
+{#if modalVisible}
+  <Modal />
+{/if}
 
 <style>
   .view {
