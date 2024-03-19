@@ -2,40 +2,30 @@
 </script>
 
 <!--Each "line" of modal has two spots to fill in your guess-->
-<div class="backdrop">
-  <div class="modal">
-    <slot name="header" />
-    <hr />
-    <slot name="guess1" />
-    <hr />
-    <slot name="guess2" />
-    <hr />
-    <slot name="guess3" />
-    <hr />
-    <slot name="guess4" />
-    <hr />
-    <slot name="footer" />
-  </div>
+<div class="backdrop" />
+<div class="modal">
+  <header>Make you guesses</header>
 </div>
 
 <style>
   .backdrop {
-    background-color: gray;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vw;
-    background: 0, 0, 0, 0.5;
-    z-index: 1;
+    height: 100vh;
+    background: rgba(57, 57, 57, 0.7);
+    z-index: 10;
   }
 
   .modal {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    background: rgb(54, 115, 110);
-    width: 50%;
-    height: 400px;
+    position: fixed;
+    top: 200px;
+    left: 120px;
+    width: 80%;
+    max-height: 80vh;
+    background: white;
+    border-radius: 5px;
+    z-index: 100;
   }
 </style>
