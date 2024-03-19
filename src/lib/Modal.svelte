@@ -1,10 +1,33 @@
 <script>
+  export let number;
+
+  let guessNumber;
+
+  $: submitDisabled = number < 1;
+
+  const count = () => {
+    number--;
+  };
 </script>
 
-<!--Each "line" of modal has two spots to fill in your guess-->
 <div class="backdrop" />
 <div class="modal">
-  <header>Make you guesses</header>
+  <header>Guess and win!</header>
+  <hr />
+  <p>Submit {number} more numbers</p>
+
+  <div class="guess">
+    <label>
+      Guess a number <input type="number" bind:value={guessNumber} />
+    </label>
+    {#if number >= 1}
+      <button on:click={count} disabled={submitDisabled}>Submit</button>
+    {:else}
+      <button on:click={count} disabled={submitDisabled}>Confirm</button>
+    {/if}
+  </div>
+
+  <hr />
 </div>
 
 <style>
@@ -27,5 +50,33 @@
     background: white;
     border-radius: 5px;
     z-index: 100;
+  }
+
+  header {
+    color: black;
+    font-size: 2em;
+    text-align: left;
+    margin-left: 20px;
+  }
+
+  p {
+    color: black;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
+  label {
+    color: black;
+  }
+
+  .guess {
+    display: inline-block;
+    flex-wrap: wrap;
   }
 </style>
