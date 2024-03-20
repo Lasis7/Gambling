@@ -4,7 +4,7 @@
   import Modal from './lib/Modal.svelte';
 
   let modalVisible = false;
-  let number = 8;
+  let submits = 8;
 
   //Brings out the modal when you first press the play-button.
   const playStart = () => {
@@ -21,7 +21,7 @@
 </div>
 
 {#if modalVisible}
-  <Modal {number} />
+  <Modal {submits} />
 {/if}
 
 <style>
