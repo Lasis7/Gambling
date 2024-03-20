@@ -1,12 +1,31 @@
 <script>
-  export let number;
+  //imported these two for store purposes (guessStore)
+  import guess from '../guessStore';
+  import { onDestroy } from 'svelte';
 
-  let guessNumber;
+  //number that shows how many guesses you need to submit
+  export let submits;
 
-  $: submitDisabled = number < 1;
+  //guessNumber is for user inputs, numbers is for storing the store data
+  let guessNumber = null;
+  let numbers;
 
+  $: submitDisabled = submits < 1 || guessNumber < 1 || guessNumber > 20;
+
+  const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
+
+  onDestroy(() => {
+    if (unsub) {
+      unsub();
+    }
+  });
+
+  //array is what is already stored into the guessStore
   const count = () => {
-    number--;
+    guess.update((array) => [...array, guessNumber]);
+    submits--;
+    console.log(numbers);
+    guessNumber = '';
   };
 </script>
 
@@ -14,17 +33,14 @@
 <div class="modal">
   <header>Guess and win!</header>
   <hr />
-  <p>Submit {number} more numbers</p>
+  <p>Submit {submits} more numbers</p>
 
   <div class="guess">
     <label>
       Guess a number <input type="number" bind:value={guessNumber} />
     </label>
-    {#if number >= 1}
-      <button on:click={count} disabled={submitDisabled}>Submit</button>
-    {:else}
-      <button on:click={count} disabled={submitDisabled}>Confirm</button>
-    {/if}
+
+    <button on:click={count} disabled={submitDisabled}>Submit</button>
   </div>
 
   <hr />
