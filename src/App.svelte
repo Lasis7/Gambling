@@ -4,11 +4,19 @@
   import Modal from './lib/Modal.svelte';
 
   let modalVisible = false;
+  let modalClosed = false;
   let submits = 8;
+
+  $: isModalClosed = modalClosed;
 
   //Brings out the modal when you first press the play-button.
   const playStart = () => {
     modalVisible = true;
+  };
+
+  const modalClose = () => {
+    modalVisible = false;
+    modalClosed = true;
   };
 </script>
 
@@ -17,11 +25,15 @@
 <Navbar />
 
 <div class="view">
-  <button on:click={playStart}>Play</button>
+  {#if !isModalClosed}
+    <button on:click={playStart}>Play</button>
+  {:else}
+    <button>Start</button>
+  {/if}
 </div>
 
 {#if modalVisible}
-  <Modal {submits} />
+  <Modal {submits} on:close={modalClose} />
 {/if}
 
 <style>
