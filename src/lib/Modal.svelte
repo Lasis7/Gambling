@@ -3,6 +3,13 @@
   import guess from '../guessStore';
   import { onDestroy } from 'svelte';
 
+  import { fly } from 'svelte/transition';
+
+  //custom event
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
+
   //number that shows how many guesses you need to submit
   export let submits;
 
@@ -11,6 +18,15 @@
   let numbers;
 
   $: submitDisabled = submits < 1 || guessNumber < 1 || guessNumber > 20;
+  $: tooBigGuess = (guessNumber < 1 || guessNumber > 20) && submits !== 0;
+  $: confirmButton = submits > 1;
+
+  //hasClicked for the error message, checking if the user has clicked the input field already
+  let hasClicked = false;
+
+  const blur = () => {
+    hasClicked = true;
+  };
 
   const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
 
@@ -20,12 +36,12 @@
     }
   });
 
-  //array is what is already stored into the guessStore
+  //...array is what is already stored into the guessStore
   const count = () => {
     guess.update((array) => [...array, guessNumber]);
     submits--;
     console.log(numbers);
-    guessNumber = '';
+    guessNumber = null;
   };
 </script>
 
@@ -33,17 +49,38 @@
 <div class="modal">
   <header>Guess and win!</header>
   <hr />
+
+  {#if tooBigGuess && hasClicked}
+    <p
+      class="error"
+      in:fly={{ duration: 1000, x: -500, y: 0 }}
+      out:fly={{ duration: 1000, x: 500, y: 0 }}
+    >
+      The number needs to be between 1-20!
+    </p>
+  {/if}
+
   <p>Submit {submits} more numbers</p>
 
   <div class="guess">
     <label>
-      Guess a number <input type="number" bind:value={guessNumber} />
+      Guess a number <input
+        type="number"
+        bind:value={guessNumber}
+        on:blur={blur}
+      />
     </label>
 
     <button on:click={count} disabled={submitDisabled}>Submit</button>
   </div>
 
   <hr />
+
+  <div class="confirm">
+    <button on:click={() => dispatch('close')} disabled={confirmButton}
+      >Confirm</button
+    >
+  </div>
 </div>
 
 <style>
@@ -60,11 +97,11 @@
   .modal {
     position: fixed;
     top: 200px;
-    left: 120px;
-    width: 80%;
+    left: 300px;
+    width: 60%;
     max-height: 80vh;
     background: white;
-    border-radius: 5px;
+    border-radius: 50px;
     z-index: 100;
   }
 
@@ -73,6 +110,7 @@
     font-size: 2em;
     text-align: left;
     margin-left: 20px;
+    margin-top: 10px;
   }
 
   p {
@@ -94,5 +132,25 @@
   .guess {
     display: inline-block;
     flex-wrap: wrap;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  button:hover {
+    color: aqua;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .confirm {
+    margin-top: 20px;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: right;
   }
 </style>
