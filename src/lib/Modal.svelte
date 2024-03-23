@@ -41,12 +41,12 @@
   const count = () => {
     guess.update((array) => [...array, guessNumber]);
     submits--;
-    console.log(numbers);
     guessNumber = null;
   };
 </script>
 
 <div class="backdrop" />
+
 <div class="modal">
   <header>Guess and win!</header>
   <hr />
@@ -77,8 +77,9 @@
 
   <hr />
 
-  <div class="confirm">
-    <button on:click={() => dispatch('close')} disabled={confirmButton}
+  <div class="cancelConfirm">
+    <button on:click={() => dispatch('cancel')}>Cancel</button>
+    <button on:click={() => dispatch('confirm')} disabled={confirmButton}
       >Confirm</button
     >
   </div>
@@ -90,7 +91,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100vh;
+    height: 1000vh;
     background: rgba(57, 57, 57, 0.7);
     z-index: 10;
   }
@@ -150,11 +151,12 @@
     font-size: 1.2em;
   }
 
-  .confirm {
+  .cancelConfirm {
     margin-top: 20px;
     margin-right: 30px;
     margin-bottom: 20px;
     display: flex;
     justify-content: right;
+    gap: 10px;
   }
 </style>
