@@ -2,7 +2,9 @@
   export let heading;
 </script>
 
-<h1><b>{heading}</b></h1>
+<div class="container">
+  <h1><b>{heading}</b></h1>
+</div>
 
 <style>
   h1 {
