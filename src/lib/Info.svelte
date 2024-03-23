@@ -5,29 +5,27 @@
 
 <div class="backdrop" />
 
-<div class="container">
-  <div class="modal">
-    <header>How to play</header>
-    <hr />
-    <ol type="1">
-      <li>Press play.</li>
-      <li>Submit the asked number of numbers.</li>
-      <li>Press start. Each game costs $4.</li>
-      <li>
-        The numbers will be randomly generated. The message indicates whether
-        you won or not.
-      </li>
-    </ol>
-    <hr />
-    <p>
-      Note: if you run out of money, transfer more to your balance using
-      "Transfer money"-button.
-    </p>
-    <hr />
-    <footer>
-      <button on:click={() => dispatch('close')}>Exit</button>
-    </footer>
-  </div>
+<div class="modal">
+  <header>How to play</header>
+  <hr />
+  <ol type="1">
+    <li>Press play.</li>
+    <li>Submit the asked number of numbers.</li>
+    <li>Press start. Each game costs $4.</li>
+    <li>
+      The numbers will be randomly generated. The message indicates whether you
+      won or not.
+    </li>
+  </ol>
+  <hr />
+  <p>
+    Note: if you run out of money, transfer more to your balance using "Transfer
+    money"-button.
+  </p>
+  <hr />
+  <footer>
+    <button on:click={() => dispatch('close')}>Exit</button>
+  </footer>
 </div>
 
 <style>

@@ -99,7 +99,7 @@
   .modal {
     position: fixed;
     top: 200px;
-    left: 300px;
+    left: 305px;
     width: 60%;
     max-height: 80vh;
     background: white;

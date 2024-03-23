@@ -85,9 +85,7 @@
 {/if}
 
 {#if modalVisible}
-  <div class="container">
-    <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
-  </div>
+  <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
 {/if}
 
 <style>
