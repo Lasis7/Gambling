@@ -2,12 +2,14 @@
   let isDisabled = true;
 </script>
 
-<ul class="f">
-  <button disabled={isDisabled}>Blackjack</button>
-  <button disabled={isDisabled}>Roulette</button>
-  <button disabled={isDisabled}>Poker</button>
-  <button>ddg</button>
-</ul>
+<div class="container">
+  <ul class="f">
+    <button disabled={isDisabled}>Blackjack</button>
+    <button disabled={isDisabled}>Roulette</button>
+    <button disabled={isDisabled}>Poker</button>
+    <button>ddg</button>
+  </ul>
+</div>
 
 <style>
   .f {
