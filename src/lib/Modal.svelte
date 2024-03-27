@@ -23,11 +23,11 @@
   $: confirmButton = submits > 0;
 
   //hasClicked for the error message, checking if the user has clicked the input field already
-  let hasClicked = false;
+  // let hasClicked = false;
 
-  const blur = () => {
-    hasClicked = true;
-  };
+  // const blur = () => {
+  //   hasClicked = true;
+  // };
 
   const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
 
@@ -37,7 +37,7 @@
     }
   });
 
-  //...array is what is already stored into the guessStore
+  //array is what is already stored into the guessStore
   const count = () => {
     guess.update((array) => [...array, guessNumber]);
     submits--;
@@ -51,12 +51,8 @@
   <header>Guess and win!</header>
   <hr />
 
-  {#if hasClicked && errorMessage}
-    <p
-      class="error"
-      in:fly={{ duration: 1000, x: -500, y: 0 }}
-      out:fly={{ duration: 1000, x: 500, y: 0 }}
-    >
+  {#if errorMessage}
+    <p class="error" out:fly={{ duration: 1000, x: 500, y: 0 }}>
       The number needs to be between 1-20!
     </p>
   {/if}
