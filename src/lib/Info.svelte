@@ -80,4 +80,8 @@
     margin-right: 30px;
     margin-bottom: 20px;
   }
+
+  button:hover {
+    color: aqua;
+  }
 </style>
