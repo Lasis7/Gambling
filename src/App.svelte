@@ -3,6 +3,7 @@
   import Navbar from './lib/Navbar.svelte';
   import Modal from './lib/Modal.svelte';
   import guess from './guessStore';
+  import printNumber from './numberPrintStore';
   import { onDestroy } from 'svelte';
   import Info from './lib/Info.svelte';
 
@@ -10,16 +11,21 @@
   let modalClosed = false;
   let infoVisible = false;
   let submits = 8;
-  //numbers is for storing the store data
+  //numbers is for guessStore.js, numbers2 is for numberPrintStore.js
   let numbers;
+  let numbers2;
+
+  let randomNumbers = [];
 
   $: isModalClosed = modalClosed;
 
   const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
+  const unsubscribe = printNumber.subscribe((print2) => (numbers2 = print2));
 
   onDestroy(() => {
     if (unsub) {
       unsub();
+      unsubscribe();
     }
   });
 
@@ -53,6 +59,13 @@
   const closeInfo = () => {
     infoVisible = false;
   };
+
+  const setNumberPrint = () => {
+    for (let i = 0; i < 8; i++) {
+      randomNumbers.push(Math.floor(Math.random() * 20) + 1);
+    }
+    printNumber.set([...randomNumbers]);
+  };
 </script>
 
 <Heading heading="Pallokeno" />
@@ -69,7 +82,7 @@
         </div>
       {:else}
         <div class="modalClosed">
-          <button
+          <button on:click={setNumberPrint}
             >Start
             <p class="cost">$4</p></button
           >
