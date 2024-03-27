@@ -5,7 +5,6 @@
   import Info from './lib/Info.svelte';
   import PrintNumber from './lib/PrintNumber.svelte';
   import guess from './guessStore';
-  import printNumber from './numberPrintStore';
   import { onDestroy } from 'svelte';
 
   let modalVisible = false;
@@ -14,21 +13,16 @@
   let numberSet = false;
   let submits = 8;
 
-  //numbers is for guessStore.js, numbers2 is for numberPrintStore.js
+  //numbers is for guessStore.js
   let numbers;
-  let numbers2;
-
-  let randomNumbers = [];
 
   $: isModalClosed = modalClosed;
 
   const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
-  const unsubscribe = printNumber.subscribe((print2) => (numbers2 = print2));
 
   onDestroy(() => {
     if (unsub) {
       unsub();
-      unsubscribe();
     }
   });
 
@@ -63,11 +57,15 @@
     infoVisible = false;
   };
 
-  const setNumberPrint = () => {
-    for (let i = 0; i < 8; i++) {
-      randomNumbers.push(Math.floor(Math.random() * 20) + 1);
-    }
-    printNumber.set([...randomNumbers]);
+  // const setNumberPrint = () => {
+  //   for (let i = 0; i < 8; i++) {
+  //     randomNumbers.push(Math.floor(Math.random() * 20) + 1);
+  //   }
+  //   printNumber.set([...randomNumbers]);
+  //   numberSet = true;
+  // };
+
+  const numberPrint = () => {
     numberSet = true;
   };
 </script>
@@ -86,7 +84,7 @@
         </div>
       {:else if isModalClosed && !numberSet}
         <div class="modalClosed">
-          <button on:click={setNumberPrint}
+          <button on:click={numberPrint}
             >Start
             <p class="cost">$4</p></button
           >
