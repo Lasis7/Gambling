@@ -11,6 +11,7 @@
   let modalClosed = false;
   let infoVisible = false;
   let numberSet = false;
+  let gameOver = false;
   let submits = 8;
 
   //numbers is for guessStore.js
@@ -57,16 +58,32 @@
     infoVisible = false;
   };
 
-  // const setNumberPrint = () => {
-  //   for (let i = 0; i < 8; i++) {
-  //     randomNumbers.push(Math.floor(Math.random() * 20) + 1);
-  //   }
-  //   printNumber.set([...randomNumbers]);
-  //   numberSet = true;
-  // };
-
   const numberPrint = () => {
     numberSet = true;
+  };
+
+  const gameEnded = () => {
+    isModalClosed = true;
+    numberSet = true;
+    gameOver = true;
+  };
+
+  const appMain = () => {
+    guess.set([]);
+    modalVisible = false;
+    modalClosed = false;
+    infoVisible = false;
+    numberSet = false;
+    gameOver = false;
+  };
+
+  const playAgain = () => {
+    guess.set([]);
+    modalVisible = true;
+    modalClosed = false;
+    infoVisible = false;
+    numberSet = false;
+    gameOver = false;
   };
 </script>
 
@@ -77,21 +94,32 @@
 <div class="container">
   <div class="view">
     <div class="insideView">
-      {#if !isModalClosed && !numberSet}
-        <div class="modalNotClosed">
-          <button on:click={playStart}>Play</button>
-          <button on:click={openInfo}>How to play?</button>
+      {#if !isModalClosed && !numberSet && !gameOver}
+        <div class="container">
+          <div class="modalNotClosed">
+            <button on:click={playStart}>Play</button>
+            <button on:click={openInfo}>How to play?</button>
+          </div>
         </div>
-      {:else if isModalClosed && !numberSet}
-        <div class="modalClosed">
-          <button on:click={numberPrint}
-            >Start
-            <p class="cost">$4</p></button
-          >
-          <button on:click={cancelApp}>Cancel</button>
+      {:else if isModalClosed && !numberSet && !gameOver}
+        <div class="container">
+          <div class="modalClosed">
+            <button on:click={numberPrint}
+              >Start
+              <p class="cost">$4</p></button
+            >
+            <button on:click={cancelApp}>Cancel</button>
+          </div>
         </div>
-      {:else if isModalClosed && numberSet}
-        <PrintNumber />
+      {:else if isModalClosed && numberSet && !gameOver}
+        <PrintNumber on:next={gameEnded} />
+      {:else if isModalClosed && numberSet && gameOver}
+        <div class="container">
+          <div class="gameOver">
+            <button on:click={appMain}>Main</button>
+            <button on:click={playAgain}>Play again</button>
+          </div>
+        </div>
       {/if}
     </div>
   </div>
@@ -127,6 +155,14 @@
   }
 
   .modalNotClosed {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .gameOver {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
