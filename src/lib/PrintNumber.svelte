@@ -2,6 +2,7 @@
   import { onDestroy } from 'svelte';
   import { fly, scale } from 'svelte/transition';
   import guess from '../guessStore';
+  import { createEventDispatcher } from 'svelte';
 
   //numbers = guess store
   let numbers;
@@ -13,7 +14,9 @@
   let winOrLost = '';
   let randomNumber = null;
 
-  $: nextNumberDisabled = howManyClicked >= 8;
+  $: next = howManyClicked >= 8;
+
+  const dispatch = createEventDispatcher();
 
   const unsub = guess.subscribe((guessNumbers) => (numbers = guessNumbers));
 
@@ -33,8 +36,10 @@
     randomNumber = Math.floor(Math.random() * 20) + 1;
     if (numbers.includes(randomNumber)) {
       winOrLost = 'You won a dollar';
+      dispatch('victory');
     } else {
       winOrLost = 'You won nothing';
+      dispatch('lost');
     }
     console.log(winOrLost);
     let yeah = await delay(1000);
@@ -55,11 +60,18 @@
   </div>
 {/if}
 
-<div class="container">
-  <button on:click={nextNumber} disabled={nextNumberDisabled}
-    >Next number</button
-  >
-</div>
+{#if !next}
+  <div class="container">
+    <button on:click={nextNumber}>Next number</button>
+  </div>
+{:else}
+  <div class="container">
+    <div class="next">
+      <button on:click={nextNumber} disabled={next}>Next number</button>
+      <button on:click={() => dispatch('next')}>Next</button>
+    </div>
+  </div>
+{/if}
 
 <style>
   .ball {
@@ -69,6 +81,23 @@
   }
 
   button {
-    margin-top: 50px;
+    margin-top: 20px;
+  }
+
+  button:hover {
+    color: aqua;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+    color: gray;
+  }
+
+  .next {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
   }
 </style>
