@@ -1,37 +1,25 @@
 <script>
-  import printNumber from '../numberPrintStore';
   import { onDestroy } from 'svelte';
   import { fly, scale } from 'svelte/transition';
   import guess from '../guessStore';
 
-  //numbers = random number, numbers2 = guess numbers
+  //numbers = guess store
   let numbers;
-  let numbers2;
 
-  let i = -1;
   let showNumber = false;
-  let winOrLost;
 
-  $: nextNumberDisabled = i > 6;
+  let howManyClicked = 0;
 
-  const unsub = printNumber.subscribe(
-    (randomNumbers) => (numbers = randomNumbers)
-  );
+  let winOrLost = '';
+  let randomNumber = null;
 
-  const unsubscribe = guess.subscribe(
-    (guessNumbers) => (numbers2 = guessNumbers)
-  );
+  $: nextNumberDisabled = howManyClicked >= 8;
 
-  $: if (numbers2.includes(numbers)) {
-    winOrLost = 'You won 1 dollar';
-  } else {
-    winOrLost = 'You did not win this time';
-  }
+  const unsub = guess.subscribe((guessNumbers) => (numbers = guessNumbers));
 
   onDestroy(() => {
     if (unsub) {
       unsub();
-      unsubscribe();
     }
   });
 
@@ -40,12 +28,18 @@
   };
 
   const nextNumber = async () => {
+    howManyClicked++;
     showNumber = false;
+    randomNumber = Math.floor(Math.random() * 20) + 1;
+    if (numbers.includes(randomNumber)) {
+      winOrLost = 'You won a dollar';
+    } else {
+      winOrLost = 'You won nothing';
+    }
+    console.log(winOrLost);
     let yeah = await delay(1000);
-    i++;
     showNumber = true;
     yeah = await delay(1000);
-    console.log(winOrLost);
   };
 </script>
 
@@ -56,7 +50,7 @@
       in:fly={{ duration: 750, x: -500, y: 0 }}
       out:scale={{ duration: 750 }}
     >
-      {numbers[i]}
+      {randomNumber}
     </div>
   </div>
 {/if}
