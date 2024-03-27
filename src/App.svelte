@@ -2,15 +2,18 @@
   import Heading from './lib/Heading.svelte';
   import Navbar from './lib/Navbar.svelte';
   import Modal from './lib/Modal.svelte';
+  import Info from './lib/Info.svelte';
+  import PrintNumber from './lib/PrintNumber.svelte';
   import guess from './guessStore';
   import printNumber from './numberPrintStore';
   import { onDestroy } from 'svelte';
-  import Info from './lib/Info.svelte';
 
   let modalVisible = false;
   let modalClosed = false;
   let infoVisible = false;
+  let numberSet = false;
   let submits = 8;
+
   //numbers is for guessStore.js, numbers2 is for numberPrintStore.js
   let numbers;
   let numbers2;
@@ -65,6 +68,7 @@
       randomNumbers.push(Math.floor(Math.random() * 20) + 1);
     }
     printNumber.set([...randomNumbers]);
+    numberSet = true;
   };
 </script>
 
@@ -75,12 +79,12 @@
 <div class="container">
   <div class="view">
     <div class="insideView">
-      {#if !isModalClosed}
+      {#if !isModalClosed && !numberSet}
         <div class="modalNotClosed">
           <button on:click={playStart}>Play</button>
           <button on:click={openInfo}>How to play?</button>
         </div>
-      {:else}
+      {:else if isModalClosed && !numberSet}
         <div class="modalClosed">
           <button on:click={setNumberPrint}
             >Start
@@ -88,6 +92,8 @@
           >
           <button on:click={cancelApp}>Cancel</button>
         </div>
+      {:else if isModalClosed && numberSet}
+        <PrintNumber />
       {/if}
     </div>
   </div>
