@@ -13,3 +13,5 @@ No arrows for input box type "text": https://stackoverflow.com/questions/1310711
 Huge shoutout to: https://www.youtube.com/@slayingthedragon
 
 Media queries: https://youtu.be/K24lUqcT0Ms?si=qxbzL380AaoeDJVP
+
+Random number: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
