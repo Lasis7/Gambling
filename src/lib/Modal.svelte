@@ -18,16 +18,8 @@
   let numbers;
 
   $: submitDisabled = submits < 1 || guessNumber < 1 || guessNumber > 20;
-  //$: tooBigGuess = (guessNumber < 1 || guessNumber > 20) && submits !== 0;
   $: errorMessage = submits > 0;
   $: confirmButton = submits > 0;
-
-  //hasClicked for the error message, checking if the user has clicked the input field already
-  // let hasClicked = false;
-
-  // const blur = () => {
-  //   hasClicked = true;
-  // };
 
   const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
 
