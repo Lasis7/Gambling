@@ -1,20 +1,25 @@
 <script>
   import { onDestroy } from 'svelte';
-  import { fly, scale } from 'svelte/transition';
+  import { fly, scale, slide } from 'svelte/transition';
   import guess from '../guessStore';
   import { createEventDispatcher } from 'svelte';
 
   //numbers = guess store
   let numbers;
-
+  //show next randomly generated number
   let showNumber = false;
 
   let howManyClicked = 0;
 
+  //winOrLost changes depending on the value of the randomNumber-variable
   let winOrLost = '';
   let randomNumber = null;
 
-  $: next = howManyClicked >= 8;
+  $: nextNumberButton = howManyClicked >= 8;
+  let howMuchWon = 0;
+
+  let outcomeVisible = false;
+  let showProfit = false;
 
   const dispatch = createEventDispatcher();
 
@@ -26,6 +31,10 @@
     }
   });
 
+  const profitShown = () => {
+    showProfit = true;
+  };
+
   const delay = (time) => {
     return new Promise((resolve) => setTimeout(resolve, time));
   };
@@ -33,9 +42,11 @@
   const nextNumber = async () => {
     howManyClicked++;
     showNumber = false;
+    outcomeVisible = false;
     randomNumber = Math.floor(Math.random() * 20) + 1;
     if (numbers.includes(randomNumber)) {
       winOrLost = 'You won a dollar';
+      howMuchWon++;
       dispatch('victory');
     } else {
       winOrLost = 'You won nothing';
@@ -43,10 +54,11 @@
     console.log(winOrLost);
     let yeah = await delay(1000);
     showNumber = true;
+    outcomeVisible = true;
   };
 </script>
 
-{#if showNumber}
+{#if showNumber && !showProfit}
   <div class="container">
     <div
       class="ball"
@@ -58,22 +70,35 @@
   </div>
 {/if}
 
-{#if !next}
+{#if !nextNumberButton && !showProfit}
   <div class="container">
     <button on:click={nextNumber}>Next number</button>
   </div>
-{:else}
+{:else if nextNumberButton && !showProfit}
   <div class="container">
     <div class="next">
-      <button on:click={nextNumber} disabled={next}>Next number</button>
-      <button on:click={() => dispatch('next')}>Next</button>
+      <button on:click={nextNumber} disabled={nextNumberButton}
+        >Next number</button
+      >
+      <button on:click={profitShown}>Next</button>
+    </div>
+  </div>
+{:else if nextNumberButton && showProfit}
+  {howMuchWon}
+  <button on:click={() => dispatch('next')}>Next</button>
+{/if}
+
+{#if outcomeVisible && !showProfit}
+  <div class="container">
+    <div
+      class="window"
+      in:slide={{ duration: 750, axis: 'x' }}
+      out:slide={{ duration: 1000, axis: 'y' }}
+    >
+      {winOrLost}
     </div>
   </div>
 {/if}
-
-<div class="window">
-  {winOrLost}
-</div>
 
 <style>
   .ball {
@@ -109,7 +134,7 @@
     border-radius: 5px;
     font-size: 1.5rem;
     display: flex;
-    position: absolute;
+    justify-content: center;
     margin-top: 30px;
   }
 </style>
