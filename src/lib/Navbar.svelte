@@ -1,18 +1,19 @@
 <script>
   let isDisabled = true;
+
+  const navBar = ['Blackjack', 'Roulette', 'Bingo', 'Pinball'];
 </script>
 
 <div class="container">
-  <ul class="f">
-    <button disabled={isDisabled}>Blackjack</button>
-    <button disabled={isDisabled}>Roulette</button>
-    <button disabled={isDisabled}>Poker</button>
-    <button>ddg</button>
-  </ul>
+  <div class="navItem">
+    {#each navBar as navItem}
+      <button disabled={isDisabled}>{navItem}</button>
+    {/each}
+  </div>
 </div>
 
 <style>
-  .f {
+  .navItem {
     background-color: root;
     padding: 0.2em;
     margin: 1px;
@@ -27,6 +28,6 @@
   }
 
   button:disabled {
-    cursor: not-allowed;
+    cursor: default;
   }
 </style>
