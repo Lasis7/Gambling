@@ -7,10 +7,18 @@
   import guess from './guessStore';
   import { onDestroy } from 'svelte';
 
+  /*
+  modalvisible =  Is the modal visible, playStart-function
+  modalClosed = Has the modal been closed/has the user given their numbers. Used to determine what is visible on view
+  infoVisible = Is the info modal visible, closeInfo-function
+  numberDraw = Indicates whether the game has been started (start-button), numberPrint-function
+  gameOver = Indicates whether the game has ended. appMain- and playAgain-functions.
+  submits = variable for Modal.svelte, shows how many more numbers u need to submit
+  */
   let modalVisible = false;
   let modalClosed = false;
   let infoVisible = false;
-  let numberSet = false;
+  let numberDraw = false;
   let gameOver = false;
   let submits = 8;
 
@@ -32,11 +40,15 @@
     modalVisible = true;
   };
 
+  //Open the info-modal on the first view
   const openInfo = () => {
     infoVisible = true;
   };
 
-  //Used on custom event, one for closing the modal, other for recognizing that it has been closed, so the button can change
+  /*
+  Used on custom event, one for closing the modal, other for recognizing that it has been closed
+  so the button can change
+  */
   const modalClose = () => {
     modalVisible = false;
     modalClosed = true;
@@ -54,35 +66,40 @@
     modalClosed = false;
   };
 
+  //closes the info-modal
   const closeInfo = () => {
     infoVisible = false;
   };
 
+  //Start the game after paying
   const numberPrint = () => {
-    numberSet = true;
+    numberDraw = true;
   };
 
+  //What is visible after the game ends
   const gameEnded = () => {
     isModalClosed = true;
-    numberSet = true;
+    numberDraw = true;
     gameOver = true;
   };
 
+  //Takes you to the first
   const appMain = () => {
     guess.set([]);
     modalVisible = false;
     modalClosed = false;
     infoVisible = false;
-    numberSet = false;
+    numberDraw = false;
     gameOver = false;
   };
 
+  //Opens the modal and starts a new game
   const playAgain = () => {
     guess.set([]);
     modalVisible = true;
     modalClosed = false;
     infoVisible = false;
-    numberSet = false;
+    numberDraw = false;
     gameOver = false;
   };
 </script>
@@ -94,14 +111,14 @@
 <div class="container">
   <div class="view">
     <div class="insideView">
-      {#if !isModalClosed && !numberSet && !gameOver}
+      {#if !isModalClosed && !numberDraw && !gameOver}
         <div class="container">
           <div class="modalNotClosed">
             <button on:click={playStart}>Play</button>
             <button on:click={openInfo}>How to play?</button>
           </div>
         </div>
-      {:else if isModalClosed && !numberSet && !gameOver}
+      {:else if isModalClosed && !numberDraw && !gameOver}
         <div class="container">
           <div class="modalClosed">
             <button on:click={numberPrint}
@@ -111,9 +128,9 @@
             <button on:click={cancelApp}>Cancel</button>
           </div>
         </div>
-      {:else if isModalClosed && numberSet && !gameOver}
+      {:else if isModalClosed && numberDraw && !gameOver}
         <PrintNumber on:next={gameEnded} />
-      {:else if isModalClosed && numberSet && gameOver}
+      {:else if isModalClosed && numberDraw && gameOver}
         <div class="container">
           <div class="gameOver">
             <button on:click={appMain}>Main</button>
