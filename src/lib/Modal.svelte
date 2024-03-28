@@ -126,6 +126,7 @@
 
   button:disabled {
     cursor: not-allowed;
+    color: gray;
   }
 
   button:hover {
