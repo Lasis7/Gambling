@@ -39,12 +39,10 @@
       dispatch('victory');
     } else {
       winOrLost = 'You won nothing';
-      dispatch('lost');
     }
     console.log(winOrLost);
     let yeah = await delay(1000);
     showNumber = true;
-    yeah = await delay(1000);
   };
 </script>
 
@@ -73,6 +71,10 @@
   </div>
 {/if}
 
+<div class="window">
+  {winOrLost}
+</div>
+
 <style>
   .ball {
     border: 1px solid white;
@@ -99,5 +101,15 @@
     justify-content: center;
     gap: 10px;
     margin-bottom: 10px;
+  }
+
+  .window {
+    background-color: gray;
+    padding: 1em;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    display: flex;
+    position: absolute;
+    margin-top: 30px;
   }
 </style>
