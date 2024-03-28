@@ -17,3 +17,7 @@ Media queries: https://youtu.be/K24lUqcT0Ms?si=qxbzL380AaoeDJVP
 Random number: https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
 
 Async: https://stackoverflow.com/questions/58177666/how-to-print-a-list-with-a-delay-between-each-item-in-html
+
+Includes-method: https://www.w3schools.com/jsref/jsref_includes_array.asp
+
+Transitions: https://svelte.dev/docs/svelte-transition#slide
