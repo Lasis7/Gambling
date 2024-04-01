@@ -4,22 +4,25 @@
   import guess from '../guessStore';
   import { createEventDispatcher } from 'svelte';
 
-  //numbers = guess store
-  let numbers;
-  //show next randomly generated number
-  let showNumber = false;
+  let numbers; //variable for storing the contents of guess store
 
-  let howManyClicked = 0;
+  export let showNumber; //show next randomly generated number
 
-  //winOrLost changes depending on the value of the randomNumber-variable
-  let winOrLost = '';
-  let randomNumber = null;
+  export let howManyClicked;
+
+  export let winOrLost; //winOrLost changes depending on the value of the randomNumber-variable
+  export let randomNumber; //randomly generated number, shown one by one
+  export let randomNumbers; //generated numbers are pushed here for the results-sceen
 
   $: nextNumberButton = howManyClicked >= 8;
-  let howMuchWon = 0;
+  $: didProfit = howMuchWon > 3;
+  $: noProfit = howMuchWon < 3;
+  $: even = howMuchWon = 0;
 
-  let outcomeVisible = false;
-  let showProfit = false;
+  export let howMuchWon;
+
+  export let outcomeVisible;
+  export let showProfit;
 
   const dispatch = createEventDispatcher();
 
@@ -30,32 +33,6 @@
       unsub();
     }
   });
-
-  const profitShown = () => {
-    showProfit = true;
-  };
-
-  const delay = (time) => {
-    return new Promise((resolve) => setTimeout(resolve, time));
-  };
-
-  const nextNumber = async () => {
-    howManyClicked++;
-    showNumber = false;
-    outcomeVisible = false;
-    randomNumber = Math.floor(Math.random() * 20) + 1;
-    if (numbers.includes(randomNumber)) {
-      winOrLost = 'You won a dollar';
-      howMuchWon++;
-      dispatch('victory');
-    } else {
-      winOrLost = 'You won nothing';
-    }
-    console.log(winOrLost);
-    let yeah = await delay(1000);
-    showNumber = true;
-    outcomeVisible = true;
-  };
 </script>
 
 {#if showNumber && !showProfit}
@@ -72,20 +49,25 @@
 
 {#if !nextNumberButton && !showProfit}
   <div class="container">
-    <button on:click={nextNumber}>Next number</button>
+    <button on:click={() => dispatch('nextNumber')}>Next number</button>
   </div>
 {:else if nextNumberButton && !showProfit}
   <div class="container">
     <div class="next">
-      <button on:click={nextNumber} disabled={nextNumberButton}
-        >Next number</button
-      >
-      <button on:click={profitShown}>Next</button>
+      <button disabled={nextNumberButton}>Next number</button>
+      <button on:click={() => dispatch('profit')}>Next</button>
     </div>
   </div>
 {:else if nextNumberButton && showProfit}
-  {howMuchWon}
-  <button on:click={() => dispatch('next')}>Next</button>
+  <div class="scoreboard">
+    Winnings: {howMuchWon}$
+  </div>
+  <div class="scoreboard">Profit:</div>
+  <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
+  <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
+  <div class="next">
+    <button on:click={() => dispatch('next')}>Next</button>
+  </div>
 {/if}
 
 {#if outcomeVisible && !showProfit}
@@ -136,5 +118,10 @@
     display: flex;
     justify-content: center;
     margin-top: 30px;
+  }
+
+  .scoreboard {
+    justify-content: center;
+    margin-top: 10px;
   }
 </style>
