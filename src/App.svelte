@@ -7,6 +7,16 @@
   import guess from './guessStore';
   import { onDestroy } from 'svelte';
 
+  let howManyClicked = 0;
+  let showNumber = false;
+  let outcomeVisible = false;
+  let randomNumber = null;
+  let winOrLost = '';
+  let howMuchWon = 0;
+  let randomNumbers = [];
+
+  let showProfit = false;
+
   /*
   modalvisible =  Is the modal visible, playStart-function
   modalClosed = Has the modal been closed/has the user given their numbers. Used to determine what is visible on view
@@ -83,7 +93,11 @@
     gameOver = true;
   };
 
-  //Takes you to the first
+  const profitShown = () => {
+    showProfit = true;
+  };
+
+  //Takes you to the first view (aka main menu)
   const appMain = () => {
     guess.set([]);
     modalVisible = false;
@@ -91,6 +105,12 @@
     infoVisible = false;
     numberDraw = false;
     gameOver = false;
+    showProfit = false;
+    howMuchWon = 0;
+    winOrLost = '';
+    howManyClicked = 0;
+    randomNumber = null;
+    randomNumbers = [];
   };
 
   //Opens the modal and starts a new game
@@ -101,6 +121,35 @@
     infoVisible = false;
     numberDraw = false;
     gameOver = false;
+    showProfit = false;
+    howManyClicked = 0;
+    showProfit = false;
+    howMuchWon = 0;
+    winOrLost = '';
+    howManyClicked = 0;
+    randomNumber = null;
+    randomNumbers = [];
+  };
+
+  const delay = (time) => {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  };
+
+  const showNextNumber = async () => {
+    howManyClicked++;
+    showNumber = false;
+    outcomeVisible = false;
+    randomNumber = Math.floor(Math.random() * 20) + 1;
+    if (numbers.includes(randomNumber)) {
+      winOrLost = 'You won a dollar';
+      howMuchWon++;
+    } else {
+      winOrLost = 'You won nothing';
+    }
+    randomNumbers.push(randomNumber);
+    let yeah = await delay(1000);
+    showNumber = true;
+    outcomeVisible = true;
   };
 </script>
 
@@ -129,7 +178,19 @@
           </div>
         </div>
       {:else if isModalClosed && numberDraw && !gameOver}
-        <PrintNumber on:next={gameEnded} />
+        <PrintNumber
+          {howManyClicked}
+          {showProfit}
+          {outcomeVisible}
+          {winOrLost}
+          {showNumber}
+          {randomNumber}
+          {randomNumbers}
+          {howMuchWon}
+          on:profit={profitShown}
+          on:next={gameEnded}
+          on:nextNumber={showNextNumber}
+        />
       {:else if isModalClosed && numberDraw && gameOver}
         <div class="container">
           <div class="gameOver">
