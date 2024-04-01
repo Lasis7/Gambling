@@ -8,7 +8,7 @@
 
 <style>
   h1 {
-    font-size: 3em;
+    font-size: 3rem;
     color: blueviolet;
     font-family: 'Times New Roman', Times, serif;
     background-color: rgb(255, 255, 255);
