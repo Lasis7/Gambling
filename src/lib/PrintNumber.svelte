@@ -7,22 +7,18 @@
   let numbers; //variable for storing the contents of guess store
 
   export let showNumber; //show next randomly generated number
-
   export let howManyClicked;
-
   export let winOrLost; //winOrLost changes depending on the value of the randomNumber-variable
   export let randomNumber; //randomly generated number, shown one by one
   export let randomNumbers; //generated numbers are pushed here for the results-sceen
+  export let howMuchWon;
+  export let outcomeVisible;
+  export let showProfit;
 
   $: nextNumberButton = howManyClicked >= 8;
   $: didProfit = howMuchWon > 3;
   $: noProfit = howMuchWon < 3;
-  $: even = howMuchWon = 0;
-
-  export let howMuchWon;
-
-  export let outcomeVisible;
-  export let showProfit;
+  $: brokeEven = howMuchWon = 3;
 
   const dispatch = createEventDispatcher();
 
@@ -58,11 +54,40 @@
       <button on:click={() => dispatch('profit')}>Next</button>
     </div>
   </div>
-{:else if nextNumberButton && showProfit}
+{:else if nextNumberButton && showProfit && didProfit}
+  <h1>Results</h1>
   <div class="scoreboard">
     Winnings: {howMuchWon}$
   </div>
-  <div class="scoreboard">Profit:</div>
+  <div class="scoreboard">
+    Profit: <div class="profit">+{0 - 3 + howMuchWon}</div>
+  </div>
+  <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
+  <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
+  <div class="next">
+    <button on:click={() => dispatch('next')}>Next</button>
+  </div>
+{:else if nextNumberButton && showProfit && brokeEven}
+  <h1>Results</h1>
+  <div class="scoreboard">
+    Winnings: {howMuchWon}$
+  </div>
+  <div class="scoreboard">
+    Profit: <div class="even">+-{howMuchWon - howMuchWon}</div>
+  </div>
+  <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
+  <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
+  <div class="next">
+    <button on:click={() => dispatch('next')}>Next</button>
+  </div>
+{:else if nextNumberButton && showProfit && noProfit}
+  <h1>Results</h1>
+  <div class="scoreboard">
+    Winnings: {howMuchWon}$
+  </div>
+  <div class="scoreboard">
+    Profit: <div class="loss">-{0 - 3 + howMuchWon}</div>
+  </div>
   <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
   <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
   <div class="next">
@@ -83,6 +108,10 @@
 {/if}
 
 <style>
+  h1 {
+    font-size: 3rem;
+  }
+
   .ball {
     border: 1px solid white;
     border-radius: 50px;
@@ -123,5 +152,24 @@
   .scoreboard {
     justify-content: center;
     margin-top: 10px;
+    display: flex;
+  }
+
+  .profit {
+    color: rgb(5, 174, 5);
+    display: flex;
+    margin-left: 3px;
+  }
+
+  .even {
+    color: rgb(195, 195, 195);
+    display: flex;
+    margin-left: 3px;
+  }
+
+  .loss {
+    color: red;
+    display: flex;
+    margin-left: 3px;
   }
 </style>
