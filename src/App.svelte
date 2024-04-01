@@ -14,7 +14,6 @@
   let winOrLost = '';
   let howMuchWon = 0;
   let randomNumbers = [];
-
   let showProfit = false;
 
   /*
