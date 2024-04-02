@@ -4,6 +4,7 @@
   import Modal from './lib/Modal.svelte';
   import Info from './lib/Info.svelte';
   import PrintNumber from './lib/PrintNumber.svelte';
+  import TransferMoney from './lib/TransferMoney.svelte';
   import guess from './guessStore';
   import { onDestroy } from 'svelte';
 
@@ -30,6 +31,7 @@
   let infoVisible = false;
   let numberDraw = false;
   let gameOver = false;
+  let moneyModal = false;
   let submits = 8;
 
   let balance = 15;
@@ -102,6 +104,10 @@
     showProfit = true;
   };
 
+  const transferMoney = () => {
+    moneyModal = true;
+  };
+
   //Takes you to the first view (aka main menu)
   const appMain = () => {
     guess.set([]);
@@ -166,9 +172,15 @@
 <div class="container">
   <div class="money">Balance: {balance}$</div>
   <div class="moreMoney">
-    <button class="moreMoneyButton">Transfer money</button>
+    <button class="moreMoneyButton" on:click={transferMoney}
+      >Transfer money</button
+    >
   </div>
 </div>
+
+{#if moneyModal}
+  <TransferMoney />
+{/if}
 
 <div class="container">
   <div class="view">
