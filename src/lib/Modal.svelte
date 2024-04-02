@@ -14,8 +14,9 @@
   export let submits;
 
   //guessNumber is for user inputs, numbers is for storing the store data
-  let guessNumber = null;
+  let guessNumber;
   let numbers;
+  let guessNumbers = [];
 
   $: submitDisabled = submits < 1 || guessNumber < 1 || guessNumber > 20;
   $: errorMessage = submits > 0;
@@ -31,9 +32,14 @@
 
   //array is what is already stored into the guessStore
   const count = () => {
-    guess.update((array) => [...array, guessNumber]);
+    guessNumbers.push(guessNumber);
     submits--;
     guessNumber = null;
+  };
+
+  const guesses = (userGuesses) => {
+    dispatch('confirm', userGuesses);
+    guessNumbers = [];
   };
 </script>
 
@@ -67,7 +73,7 @@
 
   <div class="cancelConfirm">
     <button on:click={() => dispatch('cancel')}>Cancel</button>
-    <button on:click={() => dispatch('confirm')} disabled={confirmButton}
+    <button on:click={() => guesses(guessNumbers)} disabled={confirmButton}
       >Confirm</button
     >
   </div>
