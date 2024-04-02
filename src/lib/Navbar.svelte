@@ -5,6 +5,7 @@
 </script>
 
 <div class="container">
+  <p>Coming soon!</p>
   <div class="navItem">
     {#each navBar as navItem}
       <button disabled={isDisabled}>{navItem}</button>
@@ -29,5 +30,12 @@
 
   button:disabled {
     cursor: default;
+  }
+
+  p {
+    color: red;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0;
   }
 </style>
