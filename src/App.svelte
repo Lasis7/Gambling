@@ -15,6 +15,7 @@
   let howMuchWon = 0;
   let randomNumbers = [];
   let showProfit = false;
+  let guessNumber = null;
 
   /*
   modalvisible =  Is the modal visible, playStart-function
@@ -58,7 +59,8 @@
   Used on custom event, one for closing the modal, other for recognizing that it has been closed
   so the button can change
   */
-  const modalClose = () => {
+  const modalClose = (ce) => {
+    guess.set(ce.detail);
     modalVisible = false;
     modalClosed = true;
   };
@@ -66,6 +68,7 @@
   //Cancel button in App.svelte
   const cancelApp = () => {
     modalClosed = false;
+    guess.set([]);
   };
 
   //Cancel button in modal
