@@ -32,6 +32,8 @@
   let gameOver = false;
   let submits = 8;
 
+  let balance = 15;
+
   //numbers is for guessStore.js
   let numbers;
 
@@ -86,6 +88,7 @@
   //Start the game after paying
   const numberPrint = () => {
     numberDraw = true;
+    balance -= 3;
   };
 
   //What is visible after the game ends
@@ -145,6 +148,7 @@
     if (numbers.includes(randomNumber)) {
       winOrLost = 'You won a dollar';
       howMuchWon++;
+      balance++;
     } else {
       winOrLost = 'You won nothing';
     }
@@ -158,6 +162,13 @@
 <Heading heading="Pallokeno" />
 
 <Navbar />
+
+<div class="container">
+  <div class="money">Balance: {balance}$</div>
+  <div class="moreMoney">
+    <button class="moreMoneyButton">Transfer money</button>
+  </div>
+</div>
 
 <div class="container">
   <div class="view">
@@ -174,7 +185,7 @@
           <div class="modalClosed">
             <button on:click={numberPrint}
               >Start
-              <p class="cost">$4</p></button
+              <p class="cost">$3</p></button
             >
             <button on:click={cancelApp}>Cancel</button>
           </div>
@@ -216,7 +227,6 @@
 <style>
   .view {
     border: solid 1px white;
-    margin-top: 100px;
     background-color: rgb(99, 97, 97);
     display: flex;
     justify-content: center;
@@ -257,5 +267,36 @@
 
   button:hover {
     color: aqua;
+  }
+
+  .money {
+    display: flex;
+    justify-content: right;
+    align-content: flex-start;
+    font-size: 1.3rem;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: gray;
+  }
+
+  .moreMoney {
+    display: flex;
+    justify-content: right;
+    align-content: flex-start;
+    margin-top: 0;
+  }
+
+  .moreMoneyButton {
+    display: flex;
+    font-size: 1.3rem;
+    margin-bottom: 50px;
+    color: rgb(64, 61, 61);
+    background-color: blanchedalmond;
+    margin-top: 0;
+    font-size: 0.76rem;
+  }
+
+  button:hover {
+    color: rgb(103, 98, 98);
   }
 </style>
