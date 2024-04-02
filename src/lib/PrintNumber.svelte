@@ -18,7 +18,7 @@
   $: nextNumberButton = howManyClicked >= 8;
   $: didProfit = howMuchWon > 3;
   $: noProfit = howMuchWon < 3;
-  $: brokeEven = howMuchWon = 3;
+  $: brokeEven = howMuchWon === 3;
 
   const dispatch = createEventDispatcher();
 
@@ -60,7 +60,7 @@
     Winnings: {howMuchWon}$
   </div>
   <div class="scoreboard">
-    Profit: <div class="profit">+{0 - 3 + howMuchWon}</div>
+    Profit: <div class="profit">+{0 - 3 + howMuchWon}$</div>
   </div>
   <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
   <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
@@ -73,7 +73,7 @@
     Winnings: {howMuchWon}$
   </div>
   <div class="scoreboard">
-    Profit: <div class="even">+-{howMuchWon - howMuchWon}</div>
+    Profit: <div class="even">+{howMuchWon - howMuchWon}$</div>
   </div>
   <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
   <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
@@ -86,7 +86,7 @@
     Winnings: {howMuchWon}$
   </div>
   <div class="scoreboard">
-    Profit: <div class="loss">-{0 - 3 + howMuchWon}</div>
+    Profit: <div class="loss">-{3 - howMuchWon}$</div>
   </div>
   <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
   <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
