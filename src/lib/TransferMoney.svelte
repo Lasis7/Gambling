@@ -1,10 +1,40 @@
 <script>
 </script>
 
-<div class="backdrop" />
+<div class="backdrop">
+  <div class="modal">
+    <header>Transfer money</header>
+    <hr />
 
-<div class="modal">
-  <header>Transfer money</header>
+    <label for="firstName">First name</label>
+    <input type="text" id="firstName" />
+
+    <label for="2ndName">Second name</label>
+    <input type="text" id="2ndName" />
+
+    <label for="surname">Surname</label>
+    <input type="text" id="surname" />
+
+    <hr />
+    <label for="age">Age</label>
+    <input type="number" id="age" />
+
+    <label for="DoB">Date of birth</label>
+    <input type="text" id="DoB" />
+
+    <label for="sex">Sex</label>
+    <input type="text" id="sex" />
+    <hr />
+    <label for="iceCream">Favourite ice cream</label>
+    <input type="text" id="iceCream" />
+
+    <label for="DoB">Date of birth</label>
+    <input type="text" id="DoB" />
+
+    <label for="sex">Sex</label>
+    <input type="text" id="sex" />
+    <hr />
+  </div>
 </div>
 
 <style>
@@ -32,5 +62,11 @@
   header {
     font-size: 3rem;
     color: black;
+  }
+
+  label {
+    color: black;
+    font-size: 0.8rem;
+    margin: 0;
   }
 </style>
