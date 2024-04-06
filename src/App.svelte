@@ -32,6 +32,7 @@
   let numberDraw = false;
   let gameOver = false;
   let moneyModal = false;
+  let captchaComplete = false;
   let submits = 8;
 
   let balance = 15;
@@ -108,6 +109,10 @@
     moneyModal = true;
   };
 
+  const captchaCompleted = () => {
+    captchaComplete = true;
+  };
+
   //Takes you to the first view (aka main menu)
   const appMain = () => {
     guess.set([]);
@@ -179,7 +184,7 @@
 </div>
 
 {#if moneyModal}
-  <TransferMoney />
+  <TransferMoney {captchaComplete} on:click={captchaCompleted} />
 {/if}
 
 <div class="container">
