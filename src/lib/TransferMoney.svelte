@@ -1,4 +1,5 @@
 <script>
+  export let captchaComplete;
 </script>
 
 <div class="backdrop">
@@ -6,34 +7,81 @@
     <header>Transfer money</header>
     <hr />
 
-    <label for="firstName">First name</label>
-    <input type="text" id="firstName" />
+    <div class="container1">
+      <div class="flex-item1">
+        <label for="firstName">First name</label>
+        <input type="text" id="firstName" />
+      </div>
 
-    <label for="2ndName">Second name</label>
-    <input type="text" id="2ndName" />
+      <div class="flex-item1">
+        <label for="2ndName">Second name</label>
+        <input type="text" id="2ndName" />
+      </div>
 
-    <label for="surname">Surname</label>
-    <input type="text" id="surname" />
+      <div class="flex-item1">
+        <label for="surname">Surname</label>
+        <input type="text" id="surname" />
+      </div>
+    </div>
 
     <hr />
-    <label for="age">Age</label>
-    <input type="number" id="age" />
 
-    <label for="DoB">Date of birth</label>
-    <input type="text" id="DoB" />
+    <div class="container1">
+      <div class="flex-item1">
+        <label for="age">Age</label>
+        <input type="number" id="age" />
+      </div>
 
-    <label for="sex">Sex</label>
-    <input type="text" id="sex" />
+      <div class="flex-item1">
+        <label for="DoB">Date of birth</label>
+        <input type="text" id="DoB" />
+      </div>
+
+      <div class="flex-item1">
+        <label for="sex">Gmail</label>
+        <input type="text" id="gmail" />
+      </div>
+    </div>
+
     <hr />
-    <label for="iceCream">Favourite ice cream</label>
-    <input type="text" id="iceCream" />
 
-    <label for="DoB">Date of birth</label>
-    <input type="text" id="DoB" />
+    <div class="container2">
+      <div class="flex-item2">
+        <label for="iceCream">Favourite ice cream</label>
+        <input type="text" id="iceCream" />
+      </div>
 
-    <label for="sex">Sex</label>
-    <input type="text" id="sex" />
+      <div class="flex-item2">
+        <label for="DoB">Did you shower today?</label>
+        <input type="text" id="shower" />
+      </div>
+
+      <div class="flex-item2">
+        <label for="alphabet">The last alphabet</label>
+        <input type="text" id="alphabet" />
+      </div>
+
+      <div class="flex-item2">
+        <label for="alphabet">The last alphabet</label>
+        <input type="text" id="alphabet" />
+      </div>
+    </div>
     <hr />
+
+    <div class="captcha">
+      {#if captchaComplete}
+        <label for="button1">Complete the captcha</label>
+        <button
+          class="buttonCaptchaYes"
+          id="button1"
+          on:click
+          disabled={captchaComplete}
+        ></button>
+      {:else}
+        <label for="button1">Complete the captcha</label>
+        <button class="buttonCaptcha" id="button1" on:click></button>
+      {/if}
+    </div>
   </div>
 </div>
 
@@ -59,6 +107,25 @@
     z-index: 100;
   }
 
+  .container1 {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .flex-item1 {
+    flex-basis: 33%;
+  }
+
+  .container2 {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .flex-item2 {
+    flex-basis: 50%;
+    margin-bottom: 10px;
+  }
+
   header {
     font-size: 3rem;
     color: black;
@@ -67,6 +134,41 @@
   label {
     color: black;
     font-size: 0.8rem;
-    margin: 0;
+    display: inline-block;
+    width: 100px;
+  }
+
+  .captcha {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 300px;
+    margin-bottom: 20px;
+  }
+
+  .buttonCaptcha {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+  }
+
+  .buttonCaptchaYes {
+    width: 50px;
+    height: 50px;
+    background-color: green;
+    cursor: default;
+  }
+
+  .buttonCaptcha:focus {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    outline: none;
+  }
+
+  .buttonCaptchaYes:focus {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    outline: none;
   }
 </style>
