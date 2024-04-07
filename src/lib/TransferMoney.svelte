@@ -1,4 +1,5 @@
 <script>
+  export let captchaLoading;
   export let captchaComplete;
 </script>
 
@@ -45,9 +46,11 @@
 
     <hr />
 
+    <h2>Security questions</h2>
+
     <div class="container2">
       <div class="flex-item2">
-        <label for="iceCream">Favourite ice cream</label>
+        <label for="iceCream">Favourite ice cream?</label>
         <input type="text" id="iceCream" />
       </div>
 
@@ -57,29 +60,37 @@
       </div>
 
       <div class="flex-item2">
-        <label for="alphabet">The last alphabet</label>
+        <label for="alphabet">The number of fingers in hand?</label>
         <input type="text" id="alphabet" />
       </div>
 
       <div class="flex-item2">
-        <label for="alphabet">The last alphabet</label>
+        <label for="alphabet">The taste of water?</label>
         <input type="text" id="alphabet" />
       </div>
     </div>
     <hr />
 
     <div class="captcha">
-      {#if captchaComplete}
-        <label for="button1">Complete the captcha</label>
+      {#if !captchaComplete && !captchaLoading}
+        <label for="buttonRed">Complete the captcha</label>
+        <button class="buttonCaptcha" id="buttonRed" on:click></button>
+      {:else if !captchaComplete && captchaLoading}
+        <label for="buttonYellow">Loading...</label>
+        <button
+          class="loading"
+          id="buttonYellow"
+          on:click
+          disabled={captchaLoading}
+        ></button>
+      {:else if captchaComplete && !captchaLoading}
+        <label for="buttonGreen">✅Captcha completed</label>
         <button
           class="buttonCaptchaYes"
-          id="button1"
+          id="buttonGreen"
           on:click
           disabled={captchaComplete}
         ></button>
-      {:else}
-        <label for="button1">Complete the captcha</label>
-        <button class="buttonCaptcha" id="button1" on:click></button>
       {/if}
     </div>
   </div>
@@ -98,10 +109,10 @@
 
   .modal {
     position: fixed;
-    top: 200px;
+    top: 150px;
     left: 305px;
     width: 60%;
-    max-height: 80vh;
+    max-height: 100vh;
     background: white;
     border-radius: 50px;
     z-index: 100;
@@ -131,6 +142,12 @@
     color: black;
   }
 
+  h2 {
+    font-size: 1.8rem;
+    color: black;
+    font-weight: 500;
+  }
+
   label {
     color: black;
     font-size: 0.8rem;
@@ -149,6 +166,13 @@
     width: 50px;
     height: 50px;
     background-color: red;
+  }
+
+  .loading {
+    cursor: progress;
+    width: 50px;
+    height: 50px;
+    background-color: yellow;
   }
 
   .buttonCaptchaYes {
