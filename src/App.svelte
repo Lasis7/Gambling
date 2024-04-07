@@ -32,6 +32,7 @@
   let numberDraw = false;
   let gameOver = false;
   let moneyModal = false;
+  let captchaLoading = false;
   let captchaComplete = false;
   let submits = 8;
 
@@ -110,7 +111,12 @@
   };
 
   const captchaCompleted = () => {
-    captchaComplete = true;
+    captchaLoading = true;
+
+    setTimeout(() => {
+      captchaLoading = false;
+      captchaComplete = true;
+    }, 3000);
   };
 
   //Takes you to the first view (aka main menu)
@@ -170,75 +176,158 @@
   };
 </script>
 
-<Heading heading="Pallokeno" />
+{#if captchaLoading}
+  <div class="loading">
+    <Heading heading="Pallokeno" />
 
-<Navbar />
+    <Navbar />
 
-<div class="container">
-  <div class="money">Balance: {balance}$</div>
-  <div class="moreMoney">
-    <button class="moreMoneyButton" on:click={transferMoney}
-      >Transfer money</button
-    >
+    <div class="container">
+      <div class="money">Balance: {balance}$</div>
+      <div class="moreMoney">
+        <button class="moreMoneyButton" on:click={transferMoney}
+          >Transfer money</button
+        >
+      </div>
+    </div>
+
+    {#if moneyModal}
+      <TransferMoney
+        {captchaLoading}
+        {captchaComplete}
+        on:click={captchaCompleted}
+      />
+    {/if}
+
+    <div class="container">
+      <div class="view">
+        <div class="insideView">
+          {#if !isModalClosed && !numberDraw && !gameOver}
+            <div class="container">
+              <div class="modalNotClosed">
+                <button on:click={playStart}>Play</button>
+                <button on:click={openInfo}>How to play?</button>
+              </div>
+            </div>
+          {:else if isModalClosed && !numberDraw && !gameOver}
+            <div class="container">
+              <div class="modalClosed">
+                <button on:click={numberPrint}
+                  >Start
+                  <p class="cost">$3</p></button
+                >
+                <button on:click={cancelApp}>Cancel</button>
+              </div>
+            </div>
+          {:else if isModalClosed && numberDraw && !gameOver}
+            <PrintNumber
+              {howManyClicked}
+              {showProfit}
+              {outcomeVisible}
+              {winOrLost}
+              {showNumber}
+              {randomNumber}
+              {randomNumbers}
+              {howMuchWon}
+              on:profit={profitShown}
+              on:next={gameEnded}
+              on:nextNumber={showNextNumber}
+            />
+          {:else if isModalClosed && numberDraw && gameOver}
+            <div class="container">
+              <div class="gameOver">
+                <button on:click={appMain}>Main</button>
+                <button on:click={playAgain}>Play again</button>
+              </div>
+            </div>
+          {/if}
+        </div>
+      </div>
+    </div>
+
+    {#if infoVisible}
+      <Info on:close={closeInfo} />
+    {/if}
+
+    {#if modalVisible}
+      <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
+    {/if}
   </div>
-</div>
+{:else}
+  <Heading heading="Pallokeno" />
 
-{#if moneyModal}
-  <TransferMoney {captchaComplete} on:click={captchaCompleted} />
-{/if}
+  <Navbar />
 
-<div class="container">
-  <div class="view">
-    <div class="insideView">
-      {#if !isModalClosed && !numberDraw && !gameOver}
-        <div class="container">
-          <div class="modalNotClosed">
-            <button on:click={playStart}>Play</button>
-            <button on:click={openInfo}>How to play?</button>
-          </div>
-        </div>
-      {:else if isModalClosed && !numberDraw && !gameOver}
-        <div class="container">
-          <div class="modalClosed">
-            <button on:click={numberPrint}
-              >Start
-              <p class="cost">$3</p></button
-            >
-            <button on:click={cancelApp}>Cancel</button>
-          </div>
-        </div>
-      {:else if isModalClosed && numberDraw && !gameOver}
-        <PrintNumber
-          {howManyClicked}
-          {showProfit}
-          {outcomeVisible}
-          {winOrLost}
-          {showNumber}
-          {randomNumber}
-          {randomNumbers}
-          {howMuchWon}
-          on:profit={profitShown}
-          on:next={gameEnded}
-          on:nextNumber={showNextNumber}
-        />
-      {:else if isModalClosed && numberDraw && gameOver}
-        <div class="container">
-          <div class="gameOver">
-            <button on:click={appMain}>Main</button>
-            <button on:click={playAgain}>Play again</button>
-          </div>
-        </div>
-      {/if}
+  <div class="container">
+    <div class="money">Balance: {balance}$</div>
+    <div class="moreMoney">
+      <button class="moreMoneyButton" on:click={transferMoney}
+        >Transfer money</button
+      >
     </div>
   </div>
-</div>
 
-{#if infoVisible}
-  <Info on:close={closeInfo} />
-{/if}
+  {#if moneyModal}
+    <TransferMoney
+      {captchaLoading}
+      {captchaComplete}
+      on:click={captchaCompleted}
+    />
+  {/if}
 
-{#if modalVisible}
-  <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
+  <div class="container">
+    <div class="view">
+      <div class="insideView">
+        {#if !isModalClosed && !numberDraw && !gameOver}
+          <div class="container">
+            <div class="modalNotClosed">
+              <button on:click={playStart}>Play</button>
+              <button on:click={openInfo}>How to play?</button>
+            </div>
+          </div>
+        {:else if isModalClosed && !numberDraw && !gameOver}
+          <div class="container">
+            <div class="modalClosed">
+              <button on:click={numberPrint}
+                >Start
+                <p class="cost">$3</p></button
+              >
+              <button on:click={cancelApp}>Cancel</button>
+            </div>
+          </div>
+        {:else if isModalClosed && numberDraw && !gameOver}
+          <PrintNumber
+            {howManyClicked}
+            {showProfit}
+            {outcomeVisible}
+            {winOrLost}
+            {showNumber}
+            {randomNumber}
+            {randomNumbers}
+            {howMuchWon}
+            on:profit={profitShown}
+            on:next={gameEnded}
+            on:nextNumber={showNextNumber}
+          />
+        {:else if isModalClosed && numberDraw && gameOver}
+          <div class="container">
+            <div class="gameOver">
+              <button on:click={appMain}>Main</button>
+              <button on:click={playAgain}>Play again</button>
+            </div>
+          </div>
+        {/if}
+      </div>
+    </div>
+  </div>
+
+  {#if infoVisible}
+    <Info on:close={closeInfo} />
+  {/if}
+
+  {#if modalVisible}
+    <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
+  {/if}
 {/if}
 
 <style>
@@ -315,5 +404,9 @@
 
   button:hover {
     color: rgb(103, 98, 98);
+  }
+
+  .loading {
+    cursor: progress;
   }
 </style>
