@@ -4,6 +4,31 @@
   export let captchaLoading;
   export let captchaComplete;
 
+  export let firstName = '';
+  export let secondName = '';
+  export let surname = '';
+  export let age = null;
+  export let dateOfBirthYear = null;
+  export let gmail = '';
+  export let iceCream = '';
+  export let shower = '';
+  export let finger = null;
+  export let waterTaste = '';
+
+  $: confirmDisabled =
+    firstName.length < 1 ||
+    secondName.length < 1 ||
+    surname.length < 1 ||
+    age < 0 ||
+    age === null ||
+    dateOfBirthYear === null ||
+    gmail.length < 1 ||
+    iceCream.length < 1 ||
+    shower.length < 1 ||
+    finger < 1 ||
+    waterTaste.length < 1 ||
+    !captchaComplete;
+
   const dispatch = createEventDispatcher();
 </script>
 
@@ -15,17 +40,17 @@
     <div class="container1">
       <div class="flex-item1">
         <label for="firstName">First name</label>
-        <input type="text" id="firstName" />
+        <input type="text" id="firstName" bind:value={firstName} />
       </div>
 
       <div class="flex-item1">
         <label for="2ndName">Second name</label>
-        <input type="text" id="2ndName" />
+        <input type="text" id="2ndName" bind:value={secondName} />
       </div>
 
       <div class="flex-item1">
         <label for="surname">Surname</label>
-        <input type="text" id="surname" />
+        <input type="text" id="surname" bind:value={surname} />
       </div>
     </div>
 
@@ -34,17 +59,17 @@
     <div class="container1">
       <div class="flex-item1">
         <label for="age">Age</label>
-        <input type="number" id="age" />
+        <input type="number" id="age" bind:value={age} />
       </div>
 
       <div class="flex-item1">
-        <label for="DoB">Date of birth</label>
-        <input type="text" id="DoB" />
+        <label for="DoBY">Date birth &#40;Year&#41;</label>
+        <input type="number" id="DoBY" bind:value={dateOfBirthYear} />
       </div>
 
       <div class="flex-item1">
-        <label for="sex">Gmail</label>
-        <input type="text" id="gmail" />
+        <label for="gmail">Gmail</label>
+        <input type="text" id="gmail" bind:value={gmail} />
       </div>
     </div>
 
@@ -55,22 +80,22 @@
     <div class="container2">
       <div class="flex-item2">
         <label for="iceCream">Favourite ice cream?</label>
-        <input type="text" id="iceCream" />
+        <input type="text" id="iceCream" bind:value={iceCream} />
       </div>
 
       <div class="flex-item2">
         <label for="DoB">Did you shower today?</label>
-        <input type="text" id="shower" />
+        <input type="text" id="shower" bind:value={shower} />
       </div>
 
       <div class="flex-item2">
-        <label for="alphabet">The number of fingers in hand?</label>
-        <input type="text" id="alphabet" />
+        <label for="finger">The number of fingers in hand?</label>
+        <input type="number" id="finger" bind:value={finger} />
       </div>
 
       <div class="flex-item2">
-        <label for="alphabet">The taste of water?</label>
-        <input type="text" id="alphabet" />
+        <label for="water">The taste of water?</label>
+        <input type="text" id="water" bind:value={waterTaste} />
       </div>
     </div>
     <hr />
@@ -79,10 +104,15 @@
       {#if !captchaComplete && !captchaLoading}
         <div class="flex-containerCaptcha">
           <label for="buttonRed">Complete the captcha</label>
-          <button class="buttonCaptcha" id="buttonRed" on:click></button>
+          <button
+            class="buttonCaptcha"
+            id="buttonRed"
+            on:click={() => dispatch('captcha')}
+          ></button>
         </div>
-        <div class="flex-containerConfirm">
-          <button>Confirm</button>
+        <div class="flex-containerCancelConfirm">
+          <button on:click={() => dispatch('cancel')}>Cancel</button>
+          <button disabled={confirmDisabled}>Confirm</button>
         </div>
       {:else if !captchaComplete && captchaLoading}
         <div class="flex-containerCaptcha">
@@ -90,8 +120,9 @@
           <button class="loading" id="buttonYellow" disabled={captchaLoading}
           ></button>
         </div>
-        <div class="flex-containerConfirm">
-          <button>Confirm</button>
+        <div class="flex-containerCancelConfirm">
+          <button on:click={() => dispatch('cancel')}>Cancel</button>
+          <button disabled={confirmDisabled}>Confirm</button>
         </div>
       {:else if captchaComplete && !captchaLoading}
         <div class="flex-containerCaptcha">
@@ -103,8 +134,12 @@
             disabled={captchaComplete}
           ></button>
         </div>
-        <div class="flex-containerConfirm">
-          <button on:click={() => dispatch('confirm')}>Confirm</button>
+        <div class="flex-containerCancelConfirm">
+          <button on:click={() => dispatch('cancel')}>Cancel</button>
+          <button
+            on:click={() => dispatch('confirm')}
+            disabled={confirmDisabled}>Confirm</button
+          >
         </div>
       {/if}
     </div>
@@ -217,11 +252,12 @@
     align-items: center;
   }
 
-  .flex-containerConfirm {
+  .flex-containerCancelConfirm {
     display: flex;
     grid-column: 3;
     justify-content: flex-end;
     align-items: center;
     margin-right: 40px;
+    gap: 10px;
   }
 </style>
