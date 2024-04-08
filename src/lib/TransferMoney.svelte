@@ -1,6 +1,10 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
+
   export let captchaLoading;
   export let captchaComplete;
+
+  const dispatch = createEventDispatcher();
 </script>
 
 <div class="backdrop">
@@ -71,26 +75,37 @@
     </div>
     <hr />
 
-    <div class="captcha">
+    <div class="grid-container">
       {#if !captchaComplete && !captchaLoading}
-        <label for="buttonRed">Complete the captcha</label>
-        <button class="buttonCaptcha" id="buttonRed" on:click></button>
+        <div class="flex-containerCaptcha">
+          <label for="buttonRed">Complete the captcha</label>
+          <button class="buttonCaptcha" id="buttonRed" on:click></button>
+        </div>
+        <div class="flex-containerConfirm">
+          <button>Confirm</button>
+        </div>
       {:else if !captchaComplete && captchaLoading}
-        <label for="buttonYellow">Loading...</label>
-        <button
-          class="loading"
-          id="buttonYellow"
-          on:click
-          disabled={captchaLoading}
-        ></button>
+        <div class="flex-containerCaptcha">
+          <label for="buttonYellow">Loading...</label>
+          <button class="loading" id="buttonYellow" disabled={captchaLoading}
+          ></button>
+        </div>
+        <div class="flex-containerConfirm">
+          <button>Confirm</button>
+        </div>
       {:else if captchaComplete && !captchaLoading}
-        <label for="buttonGreen">✅Captcha completed</label>
-        <button
-          class="buttonCaptchaYes"
-          id="buttonGreen"
-          on:click
-          disabled={captchaComplete}
-        ></button>
+        <div class="flex-containerCaptcha">
+          <label for="buttonGreen">✅Captcha completed</label>
+          <button
+            class="buttonCaptchaYes"
+            id="buttonGreen"
+            on:click
+            disabled={captchaComplete}
+          ></button>
+        </div>
+        <div class="flex-containerConfirm">
+          <button on:click={() => dispatch('confirm')}>Confirm</button>
+        </div>
       {/if}
     </div>
   </div>
@@ -155,13 +170,6 @@
     width: 100px;
   }
 
-  .captcha {
-    display: flex;
-    justify-content: flex-start;
-    margin-left: 300px;
-    margin-bottom: 20px;
-  }
-
   .buttonCaptcha {
     width: 50px;
     height: 50px;
@@ -192,7 +200,28 @@
   .buttonCaptchaYes:focus {
     width: 50px;
     height: 50px;
-    background-color: red;
+    background-color: green;
     outline: none;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: 20px;
+  }
+
+  .flex-containerCaptcha {
+    display: flex;
+    grid-column: 2;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .flex-containerConfirm {
+    display: flex;
+    grid-column: 3;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 40px;
   }
 </style>
