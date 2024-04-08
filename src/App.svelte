@@ -42,6 +42,7 @@
   let numbers;
 
   $: isModalClosed = modalClosed;
+  $: enoughMoney = balance < 3;
 
   const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
 
@@ -51,42 +52,14 @@
     }
   });
 
-  //Brings out the modal when you first press the play-button.
-  const playStart = () => {
-    modalVisible = true;
-  };
-
-  //Open the info-modal on the first view
-  const openInfo = () => {
-    infoVisible = true;
-  };
-
-  /*
-  Used on custom event, one for closing the modal, other for recognizing that it has been closed
-  so the button can change
-  */
-  const modalClose = (ce) => {
-    guess.set(ce.detail);
-    modalVisible = false;
-    modalClosed = true;
-  };
+  //------------------------------------
+  //FUNCTIONS RELATED TO: __App.svelte__
+  //------------------------------------
 
   //Cancel button in App.svelte
   const cancelApp = () => {
     modalClosed = false;
     guess.set([]);
-  };
-
-  //Cancel button in modal
-  const cancelModal = () => {
-    guess.set([]);
-    modalVisible = false;
-    modalClosed = false;
-  };
-
-  //closes the info-modal
-  const closeInfo = () => {
-    infoVisible = false;
   };
 
   //Start the game after paying
@@ -100,23 +73,6 @@
     isModalClosed = true;
     numberDraw = true;
     gameOver = true;
-  };
-
-  const profitShown = () => {
-    showProfit = true;
-  };
-
-  const transferMoney = () => {
-    moneyModal = true;
-  };
-
-  const captchaCompleted = () => {
-    captchaLoading = true;
-
-    setTimeout(() => {
-      captchaLoading = false;
-      captchaComplete = true;
-    }, 3000);
   };
 
   //Takes you to the first view (aka main menu)
@@ -153,10 +109,83 @@
     randomNumbers = [];
   };
 
+  //FUNCTIONS RELATED TO: __Info.svelte__
+
+  //Open the info-modal on the first view
+  const openInfo = () => {
+    infoVisible = true;
+  };
+
+  //closes the info-modal
+  const closeInfo = () => {
+    infoVisible = false;
+  };
+
+  //----------------------------------------------
+  //FUNCTIONS RELATED TO: __TransferMoney.svelte__
+  //----------------------------------------------
+
+  //opens the modal for adding money in case you run out
+  const moneyModalShow = () => {
+    moneyModal = true;
+  };
+
+  //function for the captcha process
+  const captchaCompleted = () => {
+    captchaLoading = true;
+
+    setTimeout(() => {
+      captchaLoading = false;
+      captchaComplete = true;
+    }, 3000);
+  };
+
+  const transferMoney = () => {
+    balance += 15;
+    moneyModal = false;
+  };
+
+  //--------------------------------------
+  //FUNCTIONS RELATED TO: __Modal.svelte__
+  //--------------------------------------
+
+  //Brings out the modal when you first press the play-button.
+  const playStart = () => {
+    modalVisible = true;
+  };
+
+  /*
+  Used on custom event, one for closing the modal, other for recognizing that it has been closed
+  so the button can change
+  */
+  const modalClose = (ce) => {
+    guess.set(ce.detail);
+    modalVisible = false;
+    modalClosed = true;
+  };
+
+  //Cancel button in modal
+  const cancelModal = () => {
+    guess.set([]);
+    modalVisible = false;
+    modalClosed = false;
+  };
+
+  //--------------------------------------------
+  //FUNCTIONS RELATED TO: __PrintNumber.svelte__
+  //--------------------------------------------
+
+  //function for showing the results-view
+  const profitShown = () => {
+    showProfit = true;
+  };
+
+  //a small delay for the function below so that animations have time to finish
   const delay = (time) => {
     return new Promise((resolve) => setTimeout(resolve, time));
   };
 
+  //this monster of a function is used for when the actual game starts
   const showNextNumber = async () => {
     howManyClicked++;
     showNumber = false;
@@ -185,7 +214,7 @@
     <div class="container">
       <div class="money">Balance: {balance}$</div>
       <div class="moreMoney">
-        <button class="moreMoneyButton" on:click={transferMoney}
+        <button class="moreMoneyButton" on:click={moneyModalShow}
           >Transfer money</button
         >
       </div>
@@ -196,6 +225,7 @@
         {captchaLoading}
         {captchaComplete}
         on:click={captchaCompleted}
+        on:confirm={transferMoney}
       />
     {/if}
 
@@ -261,7 +291,7 @@
   <div class="container">
     <div class="money">Balance: {balance}$</div>
     <div class="moreMoney">
-      <button class="moreMoneyButton" on:click={transferMoney}
+      <button class="moreMoneyButton" on:click={moneyModalShow}
         >Transfer money</button
       >
     </div>
@@ -272,6 +302,7 @@
       {captchaLoading}
       {captchaComplete}
       on:click={captchaCompleted}
+      on:confirm={transferMoney}
     />
   {/if}
 
