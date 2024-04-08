@@ -16,7 +16,17 @@
   let howMuchWon = 0;
   let randomNumbers = [];
   let showProfit = false;
-  let guessNumber = null;
+
+  let firstName = '';
+  let secondName = '';
+  let surname = '';
+  let age = null;
+  let dateOfBirthYear = null;
+  let gmail = '';
+  let iceCream = '';
+  let shower = '';
+  let finger = null;
+  let waterTaste = '';
 
   /*
   modalvisible =  Is the modal visible, playStart-function
@@ -143,6 +153,22 @@
   const transferMoney = () => {
     balance += 15;
     moneyModal = false;
+    captchaComplete = false;
+  };
+
+  const cancelMoney = () => {
+    moneyModal = false;
+    firstName = '';
+    secondName = '';
+    surname = '';
+    age = null;
+    dateOfBirthYear = null;
+    gmail = '';
+    iceCream = '';
+    shower = '';
+    finger = null;
+    waterTaste = '';
+    captchaComplete = false;
   };
 
   //--------------------------------------
@@ -226,6 +252,17 @@
         {captchaComplete}
         on:click={captchaCompleted}
         on:confirm={transferMoney}
+        on:cancel={cancelMoney}
+        {firstName}
+        {secondName}
+        {surname}
+        {age}
+        {dateOfBirthYear}
+        {gmail}
+        {iceCream}
+        {shower}
+        {finger}
+        {waterTaste}
       />
     {/if}
 
@@ -301,8 +338,19 @@
     <TransferMoney
       {captchaLoading}
       {captchaComplete}
-      on:click={captchaCompleted}
+      on:captcha={captchaCompleted}
       on:confirm={transferMoney}
+      on:cancel={cancelMoney}
+      {firstName}
+      {secondName}
+      {surname}
+      {age}
+      {dateOfBirthYear}
+      {gmail}
+      {iceCream}
+      {shower}
+      {finger}
+      {waterTaste}
     />
   {/if}
 
