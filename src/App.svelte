@@ -8,7 +8,10 @@
   import guess from './guessStore';
   import { onDestroy } from 'svelte';
 
-  let howManyClicked = 0;
+  //------------------------------------
+  //FUNCTIONS RELATED TO: __PrintNumber.svelte__
+  //------------------------------------
+
   let showNumber = false;
   let outcomeVisible = false;
   let randomNumber = null;
@@ -16,6 +19,37 @@
   let howMuchWon = 0;
   let randomNumbers = [];
   let showProfit = false;
+
+  let numberDraw = false;
+
+  //------------------------------------
+  //FUNCTIONS RELATED TO: __Info.svelte__
+  //------------------------------------
+
+  let infoVisible = false;
+
+  //------------------------------------
+  //VARIABLES RELATED TO: __App.svelte__
+  //------------------------------------
+
+  let gameOver = false;
+
+  //------------------------------------
+  //VARIABLES RELATED TO: __Modal.svelte__
+  //------------------------------------
+
+  let howManyClicked = 0;
+  let modalVisible = false;
+  let modalClosed = false;
+  let submits = 8;
+
+  $: isModalClosed = modalClosed;
+
+  //----------------------------------------------
+  //VARIABLES RELATED TO: __TransferMoney.svelte__
+  //----------------------------------------------
+
+  //these are used for validation in TransferMoney.svelte
 
   let firstName = '';
   let secondName = '';
@@ -27,32 +61,22 @@
   let shower = '';
   let finger = null;
   let waterTaste = '';
+  let bank = '';
+  let cardNumber = null;
 
-  /*
-  modalvisible =  Is the modal visible, playStart-function
-  modalClosed = Has the modal been closed/has the user given their numbers. Used to determine what is visible on view
-  infoVisible = Is the info modal visible, closeInfo-function
-  numberDraw = Indicates whether the game has been started (start-button), numberPrint-function
-  gameOver = Indicates whether the game has ended. appMain- and playAgain-functions.
-  submits = variable for Modal.svelte, shows how many more numbers u need to submit
-  */
-  let modalVisible = false;
-  let modalClosed = false;
-  let infoVisible = false;
-  let numberDraw = false;
-  let gameOver = false;
+  //these are used for making the modal itself visible + captcha functionality
   let moneyModal = false;
   let captchaLoading = false;
   let captchaComplete = false;
-  let submits = 8;
 
   let balance = 15;
 
+  //------------------------------------
+  //FUNCTIONS RELATED TO: __guessStore.js__
+  //------------------------------------
+
   //numbers is for guessStore.js
   let numbers;
-
-  $: isModalClosed = modalClosed;
-  $: enoughMoney = balance < 3;
 
   const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
 
@@ -153,6 +177,18 @@
   const transferMoney = () => {
     balance += 15;
     moneyModal = false;
+    firstName = '';
+    secondName = '';
+    surname = '';
+    age = null;
+    dateOfBirthYear = null;
+    gmail = '';
+    iceCream = '';
+    shower = '';
+    finger = null;
+    waterTaste = '';
+    bank = '';
+    cardNumber = null;
     captchaComplete = false;
   };
 
@@ -168,6 +204,8 @@
     shower = '';
     finger = null;
     waterTaste = '';
+    bank = '';
+    cardNumber = null;
     captchaComplete = false;
   };
 
@@ -250,19 +288,22 @@
       <TransferMoney
         {captchaLoading}
         {captchaComplete}
-        on:click={captchaCompleted}
+        on:captcha={captchaCompleted}
         on:confirm={transferMoney}
         on:cancel={cancelMoney}
-        {firstName}
-        {secondName}
-        {surname}
-        {age}
-        {dateOfBirthYear}
-        {gmail}
-        {iceCream}
-        {shower}
-        {finger}
-        {waterTaste}
+        bind:firstName
+        bind:secondName
+        bind:surname
+        bind:age
+        bind:dateOfBirthYear
+        bind:gmail
+        bind:iceCream
+        bind:shower
+        bind:finger
+        bind:waterTaste
+        bind:bank
+        bind:cardNumber
+        {balance}
       />
     {/if}
 
@@ -341,16 +382,19 @@
       on:captcha={captchaCompleted}
       on:confirm={transferMoney}
       on:cancel={cancelMoney}
-      {firstName}
-      {secondName}
-      {surname}
-      {age}
-      {dateOfBirthYear}
-      {gmail}
-      {iceCream}
-      {shower}
-      {finger}
-      {waterTaste}
+      bind:firstName
+      bind:secondName
+      bind:surname
+      bind:age
+      bind:dateOfBirthYear
+      bind:gmail
+      bind:iceCream
+      bind:shower
+      bind:finger
+      bind:waterTaste
+      bind:bank
+      bind:cardNumber
+      {balance}
     />
   {/if}
 
