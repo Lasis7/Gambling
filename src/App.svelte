@@ -14,7 +14,9 @@
   //VARIABLES RELATED TO: __App.svelte__
   //------------------------------------
 
+  let balance = 2;
   let gameOver = false;
+  $: notEnoughMoney = balance < 3;
 
   //------------------------------------
   //VARIABLES RELATED TO: __Info.svelte__
@@ -46,8 +48,6 @@
   let captchaLoading = false;
   let captchaComplete = false;
 
-  let balance = 15;
-
   //------------------------------------
   //VARIABLES RELATED TO: __Modal.svelte__
   //------------------------------------
@@ -72,21 +72,6 @@
   let showProfit = false;
 
   let numberDraw = false;
-
-  //----------------------------------------
-  //FUNCTIONS RELATED TO: __guessStore.js__
-  //----------------------------------------
-
-  //numbers is for guessStore.js
-  let numbers;
-
-  const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
-
-  onDestroy(() => {
-    if (unsub) {
-      unsub();
-    }
-  });
 
   //_____FUNCTIONS BELOW THIS_____
 
@@ -122,6 +107,8 @@
     numberDraw = false;
     gameOver = false;
     showProfit = false;
+    outcomeVisible = false;
+    showNumber = false;
     howMuchWon = 0;
     winOrLost = '';
     howManyClicked = 0;
@@ -137,9 +124,10 @@
     infoVisible = false;
     numberDraw = false;
     gameOver = false;
-    showProfit = false;
     howManyClicked = 0;
     showProfit = false;
+    outcomeVisible = false;
+    showNumber = false;
     howMuchWon = 0;
     winOrLost = '';
     howManyClicked = 0;
@@ -242,6 +230,21 @@
     modalClosed = false;
   };
 
+  //----------------------------------------
+  //FUNCTIONS THINGS RELATED TO: __guessStore.js__
+  //----------------------------------------
+
+  //numbers is for guessStore.js
+  let numbers;
+
+  const unsub = guess.subscribe((storeNumber) => (numbers = storeNumber));
+
+  onDestroy(() => {
+    if (unsub) {
+      unsub();
+    }
+  });
+
   //--------------------------------------------
   //FUNCTIONS RELATED TO: __PrintNumber.svelte__
   //--------------------------------------------
@@ -324,9 +327,13 @@
             </div>
           </div>
         {:else if isModalClosed && !numberDraw && !gameOver}
+          {#if notEnoughMoney}
+            <div class="errorPlayButton">Not enough money!</div>
+            <div class="errorPlayButton">Transfer money to play!</div>
+          {/if}
           <div class="container">
             <div class="modalClosed">
-              <button on:click={numberPrint}
+              <button on:click={numberPrint} disabled={notEnoughMoney}
                 >Start
                 <p class="cost">$3</p></button
               >
@@ -366,7 +373,9 @@
   {#if modalVisible}
     <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
   {/if}
+  <!---->
 {:else}
+  <!---->
   <div class="loading">
     <Heading heading="Pallokeno" />
 
@@ -416,6 +425,33 @@
 {/if}
 
 <style>
+  .money {
+    display: flex;
+    justify-content: right;
+    align-content: flex-start;
+    font-size: 1.3rem;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: gray;
+  }
+
+  .moreMoney {
+    display: flex;
+    justify-content: right;
+    align-content: flex-start;
+    margin-top: 0;
+  }
+
+  .moreMoneyButton {
+    display: flex;
+    font-size: 1.3rem;
+    margin-bottom: 50px;
+    color: rgb(64, 61, 61);
+    background-color: blanchedalmond;
+    margin-top: 0;
+    font-size: 0.76rem;
+  }
+
   .view {
     border: solid 1px white;
     background-color: rgb(99, 97, 97);
@@ -456,42 +492,26 @@
     color: rgb(162, 158, 158);
   }
 
+  .loading {
+    cursor: progress;
+  }
+
+  .errorPlayButton {
+    color: red;
+    font-size: 0.9rem;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
   button:hover {
     color: aqua;
   }
 
-  .money {
-    display: flex;
-    justify-content: right;
-    align-content: flex-start;
-    font-size: 1.3rem;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    color: gray;
-  }
-
-  .moreMoney {
-    display: flex;
-    justify-content: right;
-    align-content: flex-start;
-    margin-top: 0;
-  }
-
-  .moreMoneyButton {
-    display: flex;
-    font-size: 1.3rem;
-    margin-bottom: 50px;
-    color: rgb(64, 61, 61);
-    background-color: blanchedalmond;
-    margin-top: 0;
-    font-size: 0.76rem;
-  }
-
-  button:hover {
+  button:disabled {
     color: rgb(103, 98, 98);
-  }
-
-  .loading {
-    cursor: progress;
+    cursor: default;
   }
 </style>
