@@ -4,6 +4,8 @@
   export let captchaLoading;
   export let captchaComplete;
 
+  export let balance;
+
   export let firstName = '';
   export let secondName = '';
   export let surname = '';
@@ -14,6 +16,8 @@
   export let shower = '';
   export let finger = null;
   export let waterTaste = '';
+  export let bank = '';
+  export let cardNumber = null;
 
   $: confirmDisabled =
     firstName.length < 1 ||
@@ -27,7 +31,10 @@
     shower.length < 1 ||
     finger < 1 ||
     waterTaste.length < 1 ||
-    !captchaComplete;
+    bank.length < 1 ||
+    cardNumber.length < 1 ||
+    !captchaComplete ||
+    balance < 3;
 
   const dispatch = createEventDispatcher();
 </script>
@@ -98,6 +105,21 @@
         <input type="text" id="water" bind:value={waterTaste} />
       </div>
     </div>
+
+    <hr />
+
+    <div class="container2">
+      <div class="flex-item2">
+        <label for="bank">Your bank</label>
+        <input type="text" id="bank" bind:value={bank} />
+      </div>
+
+      <div class="flex-item2">
+        <label for="cardNumber">Funny bank card number</label>
+        <input type="text" id="cardNumber" bind:value={cardNumber} />
+      </div>
+    </div>
+
     <hr />
 
     <div class="grid-container">
