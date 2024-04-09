@@ -8,25 +8,7 @@
   import guess from './guessStore';
   import { onDestroy } from 'svelte';
 
-  //------------------------------------
-  //FUNCTIONS RELATED TO: __PrintNumber.svelte__
-  //------------------------------------
-
-  let showNumber = false;
-  let outcomeVisible = false;
-  let randomNumber = null;
-  let winOrLost = '';
-  let howMuchWon = 0;
-  let randomNumbers = [];
-  let showProfit = false;
-
-  let numberDraw = false;
-
-  //------------------------------------
-  //FUNCTIONS RELATED TO: __Info.svelte__
-  //------------------------------------
-
-  let infoVisible = false;
+  //_____VARIABLES BELOW THIS_____
 
   //------------------------------------
   //VARIABLES RELATED TO: __App.svelte__
@@ -35,15 +17,10 @@
   let gameOver = false;
 
   //------------------------------------
-  //VARIABLES RELATED TO: __Modal.svelte__
+  //VARIABLES RELATED TO: __Info.svelte__
   //------------------------------------
 
-  let howManyClicked = 0;
-  let modalVisible = false;
-  let modalClosed = false;
-  let submits = 8;
-
-  $: isModalClosed = modalClosed;
+  let infoVisible = false;
 
   //----------------------------------------------
   //VARIABLES RELATED TO: __TransferMoney.svelte__
@@ -72,8 +49,33 @@
   let balance = 15;
 
   //------------------------------------
-  //FUNCTIONS RELATED TO: __guessStore.js__
+  //VARIABLES RELATED TO: __Modal.svelte__
   //------------------------------------
+
+  let howManyClicked = 0;
+  let modalVisible = false;
+  let modalClosed = false;
+  let submits = 8;
+
+  $: isModalClosed = modalClosed;
+
+  //------------------------------------
+  //VARIABLES RELATED TO: __PrintNumber.svelte__
+  //------------------------------------
+
+  let showNumber = false;
+  let outcomeVisible = false;
+  let randomNumber = null;
+  let winOrLost = '';
+  let howMuchWon = 0;
+  let randomNumbers = [];
+  let showProfit = false;
+
+  let numberDraw = false;
+
+  //----------------------------------------
+  //FUNCTIONS RELATED TO: __guessStore.js__
+  //----------------------------------------
 
   //numbers is for guessStore.js
   let numbers;
@@ -85,6 +87,8 @@
       unsub();
     }
   });
+
+  //_____FUNCTIONS BELOW THIS_____
 
   //------------------------------------
   //FUNCTIONS RELATED TO: __App.svelte__
@@ -143,7 +147,9 @@
     randomNumbers = [];
   };
 
+  //-------------------------------------
   //FUNCTIONS RELATED TO: __Info.svelte__
+  //-------------------------------------
 
   //Open the info-modal on the first view
   const openInfo = () => {
@@ -207,6 +213,7 @@
     bank = '';
     cardNumber = null;
     captchaComplete = false;
+    captchaLoading = false;
   };
 
   //--------------------------------------
@@ -269,99 +276,7 @@
   };
 </script>
 
-{#if captchaLoading}
-  <div class="loading">
-    <Heading heading="Pallokeno" />
-
-    <Navbar />
-
-    <div class="container">
-      <div class="money">Balance: {balance}$</div>
-      <div class="moreMoney">
-        <button class="moreMoneyButton" on:click={moneyModalShow}
-          >Transfer money</button
-        >
-      </div>
-    </div>
-
-    {#if moneyModal}
-      <TransferMoney
-        {captchaLoading}
-        {captchaComplete}
-        on:captcha={captchaCompleted}
-        on:confirm={transferMoney}
-        on:cancel={cancelMoney}
-        bind:firstName
-        bind:secondName
-        bind:surname
-        bind:age
-        bind:dateOfBirthYear
-        bind:gmail
-        bind:iceCream
-        bind:shower
-        bind:finger
-        bind:waterTaste
-        bind:bank
-        bind:cardNumber
-        {balance}
-      />
-    {/if}
-
-    <div class="container">
-      <div class="view">
-        <div class="insideView">
-          {#if !isModalClosed && !numberDraw && !gameOver}
-            <div class="container">
-              <div class="modalNotClosed">
-                <button on:click={playStart}>Play</button>
-                <button on:click={openInfo}>How to play?</button>
-              </div>
-            </div>
-          {:else if isModalClosed && !numberDraw && !gameOver}
-            <div class="container">
-              <div class="modalClosed">
-                <button on:click={numberPrint}
-                  >Start
-                  <p class="cost">$3</p></button
-                >
-                <button on:click={cancelApp}>Cancel</button>
-              </div>
-            </div>
-          {:else if isModalClosed && numberDraw && !gameOver}
-            <PrintNumber
-              {howManyClicked}
-              {showProfit}
-              {outcomeVisible}
-              {winOrLost}
-              {showNumber}
-              {randomNumber}
-              {randomNumbers}
-              {howMuchWon}
-              on:profit={profitShown}
-              on:next={gameEnded}
-              on:nextNumber={showNextNumber}
-            />
-          {:else if isModalClosed && numberDraw && gameOver}
-            <div class="container">
-              <div class="gameOver">
-                <button on:click={appMain}>Main</button>
-                <button on:click={playAgain}>Play again</button>
-              </div>
-            </div>
-          {/if}
-        </div>
-      </div>
-    </div>
-
-    {#if infoVisible}
-      <Info on:close={closeInfo} />
-    {/if}
-
-    {#if modalVisible}
-      <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
-    {/if}
-  </div>
-{:else}
+{#if !captchaLoading}
   <Heading heading="Pallokeno" />
 
   <Navbar />
@@ -451,6 +366,53 @@
   {#if modalVisible}
     <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
   {/if}
+{:else}
+  <div class="loading">
+    <Heading heading="Pallokeno" />
+
+    <Navbar />
+
+    <div class="container">
+      <div class="money">Balance: {balance}$</div>
+      <div class="moreMoney">
+        <button class="moreMoneyButton">Transfer money</button>
+      </div>
+    </div>
+
+    {#if moneyModal}
+      <TransferMoney
+        {captchaLoading}
+        {captchaComplete}
+        on:cancel={cancelMoney}
+        bind:firstName
+        bind:secondName
+        bind:surname
+        bind:age
+        bind:dateOfBirthYear
+        bind:gmail
+        bind:iceCream
+        bind:shower
+        bind:finger
+        bind:waterTaste
+        bind:bank
+        bind:cardNumber
+        {balance}
+      />
+    {/if}
+
+    <div class="container">
+      <div class="view">
+        <div class="insideView">
+          <div class="container">
+            <div class="modalNotClosed">
+              <button>Play</button>
+              <button>How to play?</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {/if}
 
 <style>
