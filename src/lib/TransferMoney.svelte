@@ -21,7 +21,6 @@
 
   $: confirmDisabled =
     firstName.length < 1 ||
-    secondName.length < 1 ||
     surname.length < 1 ||
     age < 0 ||
     age === null ||
@@ -32,9 +31,23 @@
     finger < 1 ||
     waterTaste.length < 1 ||
     bank.length < 1 ||
-    cardNumber.length < 1 ||
+    cardNumber <= 0 ||
     !captchaComplete ||
-    balance < 3;
+    balance >= 3;
+
+  $: showNotice =
+    firstName.length < 1 ||
+    surname.length < 1 ||
+    age < 0 ||
+    age === null ||
+    dateOfBirthYear === null ||
+    gmail.length < 1 ||
+    iceCream.length < 1 ||
+    shower.length < 1 ||
+    finger < 1 ||
+    waterTaste.length < 1 ||
+    bank.length < 1 ||
+    cardNumber >= 0;
 
   const dispatch = createEventDispatcher();
 </script>
@@ -42,11 +55,17 @@
 <div class="backdrop">
   <div class="modal">
     <header>Transfer money</header>
+    {#if showNotice}
+      <p>Please fill the required fields with appropriate inputs</p>
+    {/if}
     <hr />
 
     <div class="container1">
       <div class="flex-item1">
-        <label for="firstName">First name</label>
+        <label for="firstName"
+          >First name
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="firstName" bind:value={firstName} />
       </div>
 
@@ -56,7 +75,10 @@
       </div>
 
       <div class="flex-item1">
-        <label for="surname">Surname</label>
+        <label for="surname"
+          >Surname
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="surname" bind:value={surname} />
       </div>
     </div>
@@ -65,17 +87,26 @@
 
     <div class="container1">
       <div class="flex-item1">
-        <label for="age">Age</label>
+        <label for="age"
+          >Age
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="number" id="age" bind:value={age} />
       </div>
 
       <div class="flex-item1">
-        <label for="DoBY">Date birth &#40;Year&#41;</label>
+        <label class="labelDob" for="DoBY"
+          >Date birth &#40;Year&#41;
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="number" id="DoBY" bind:value={dateOfBirthYear} />
       </div>
 
       <div class="flex-item1">
-        <label for="gmail">Gmail</label>
+        <label for="gmail"
+          >Gmail
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="gmail" bind:value={gmail} />
       </div>
     </div>
@@ -86,22 +117,34 @@
 
     <div class="container2">
       <div class="flex-item2">
-        <label for="iceCream">Favourite ice cream?</label>
+        <label for="iceCream"
+          >Favourite ice cream?
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="iceCream" bind:value={iceCream} />
       </div>
 
       <div class="flex-item2">
-        <label for="DoB">Did you shower today?</label>
+        <label for="DoB"
+          >Did you shower today?
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="shower" bind:value={shower} />
       </div>
 
       <div class="flex-item2">
-        <label for="finger">The number of fingers in hand?</label>
+        <label for="finger"
+          >The number of fingers in hand?
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="number" id="finger" bind:value={finger} />
       </div>
 
       <div class="flex-item2">
-        <label for="water">The taste of water?</label>
+        <label for="water"
+          >The taste of water?
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="water" bind:value={waterTaste} />
       </div>
     </div>
@@ -110,12 +153,18 @@
 
     <div class="container2">
       <div class="flex-item2">
-        <label for="bank">Your bank</label>
+        <label for="bank"
+          >Your bank
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="bank" bind:value={bank} />
       </div>
 
       <div class="flex-item2">
-        <label for="cardNumber">Funny bank card number</label>
+        <label for="cardNumber"
+          >Funny bank card number
+          <div class="requiredSymbol">*</div></label
+        >
         <input type="text" id="cardNumber" bind:value={cardNumber} />
       </div>
     </div>
@@ -136,6 +185,9 @@
           <button on:click={() => dispatch('cancel')}>Cancel</button>
           <button disabled={confirmDisabled}>Confirm</button>
         </div>
+        <div class="flex-required">
+          <div class="requiredText">*Information required</div>
+        </div>
       {:else if !captchaComplete && captchaLoading}
         <div class="flex-containerCaptcha">
           <label for="buttonYellow">Loading...</label>
@@ -145,6 +197,9 @@
         <div class="flex-containerCancelConfirm">
           <button on:click={() => dispatch('cancel')}>Cancel</button>
           <button disabled={confirmDisabled}>Confirm</button>
+        </div>
+        <div class="flex-required">
+          <div class="requiredText">*Information required</div>
         </div>
       {:else if captchaComplete && !captchaLoading}
         <div class="flex-containerCaptcha">
@@ -162,6 +217,9 @@
             on:click={() => dispatch('confirm')}
             disabled={confirmDisabled}>Confirm</button
           >
+        </div>
+        <div class="flex-required">
+          <div class="requiredText">*Information required</div>
         </div>
       {/if}
     </div>
@@ -181,7 +239,7 @@
 
   .modal {
     position: fixed;
-    top: 150px;
+    top: 70px;
     left: 305px;
     width: 60%;
     max-height: 100vh;
@@ -214,6 +272,11 @@
     color: black;
   }
 
+  p {
+    font-size: 1rem;
+    color: black;
+  }
+
   h2 {
     font-size: 1.8rem;
     color: black;
@@ -225,6 +288,10 @@
     font-size: 0.8rem;
     display: inline-block;
     width: 100px;
+  }
+
+  .labelDob {
+    font-size: 0.79rem;
   }
 
   .buttonCaptcha {
@@ -281,5 +348,24 @@
     align-items: center;
     margin-right: 40px;
     gap: 10px;
+  }
+
+  .requiredSymbol {
+    color: red;
+    display: inline-block;
+  }
+
+  .flex-required {
+    display: flex;
+    grid-column: 3;
+    justify-content: flex-end;
+    align-items: center;
+    margin-right: 40px;
+    margin-top: 10px;
+  }
+
+  .requiredText {
+    color: red;
+    font-size: 0.7rem;
   }
 </style>
