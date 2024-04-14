@@ -16,7 +16,7 @@
 
   let balance = 2;
   let gameOver = false;
-  $: notEnoughMoney = balance < 3;
+  $: notEnoughMoney = balance < 4;
 
   //------------------------------------
   //VARIABLES RELATED TO: __Info.svelte__
@@ -46,6 +46,7 @@
   //these are used for making the modal itself visible + captcha functionality
   let moneyModal = false;
   let captchaLoading = false;
+  let notice = true;
   let captchaComplete = false;
 
   //------------------------------------
@@ -88,7 +89,7 @@
   //Start the game after paying
   const numberPrint = () => {
     numberDraw = true;
-    balance -= 3;
+    balance -= 4;
   };
 
   //What is visible after the game ends
@@ -166,10 +167,14 @@
       captchaLoading = false;
       captchaComplete = true;
     }, 3000);
+
+    setTimeout(() => {
+      notice = false;
+    }, 100);
   };
 
   const transferMoney = () => {
-    balance += 15;
+    balance += 16;
     moneyModal = false;
     firstName = '';
     secondName = '';
@@ -313,6 +318,7 @@
       bind:bank
       bind:cardNumber
       {balance}
+      {notice}
     />
   {/if}
 
@@ -335,7 +341,7 @@
             <div class="modalClosed">
               <button on:click={numberPrint} disabled={notEnoughMoney}
                 >Start
-                <p class="cost">$3</p></button
+                <p class="cost">$4</p></button
               >
               <button on:click={cancelApp}>Cancel</button>
             </div>
@@ -406,6 +412,7 @@
         bind:bank
         bind:cardNumber
         {balance}
+        {notice}
       />
     {/if}
 
