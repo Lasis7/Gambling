@@ -21,3 +21,7 @@ Async: https://stackoverflow.com/questions/58177666/how-to-print-a-list-with-a-d
 Includes-method: https://www.w3schools.com/jsref/jsref_includes_array.asp
 
 Transitions: https://svelte.dev/docs/svelte-transition#slide
+
+Specific key press: https://teamtreehouse.com/community/how-do-i-make-an-event-happen-when-pressing-a-specific-key
+
+More help for detecting specific keypress: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-9.php
