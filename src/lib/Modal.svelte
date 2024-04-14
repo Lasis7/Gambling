@@ -14,7 +14,7 @@
   export let submits;
 
   //guessNumber is for user inputs, numbers is for storing the store data
-  let guessNumber;
+  let guessNumber = null;
   let numbers;
   let guessNumbers = [];
 
@@ -41,6 +41,13 @@
     dispatch('confirm', userGuesses);
     guessNumbers = [];
   };
+
+  //You can use enter when submitting numbers
+  const enterPress = (event) => {
+    if (event.key === 'Enter' && !submitDisabled) {
+      count();
+    }
+  };
 </script>
 
 <div class="backdrop" />
@@ -50,7 +57,7 @@
   <hr />
 
   {#if errorMessage}
-    <p class="error" out:fly={{ duration: 1000, x: 500, y: 0 }}>
+    <p class="error" out:fly={{ duration: 2000, x: 500, y: 0 }}>
       The number needs to be between 1-20!
     </p>
   {/if}
@@ -63,6 +70,7 @@
         type="number"
         bind:value={guessNumber}
         on:blur={blur}
+        on:keypress={enterPress}
       />
     </label>
 
