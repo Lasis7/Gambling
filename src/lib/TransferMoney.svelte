@@ -1,7 +1,9 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import { fly } from 'svelte/transition';
 
   export let captchaLoading;
+  export let notice;
   export let captchaComplete;
 
   export let balance;
@@ -47,7 +49,39 @@
     finger < 1 ||
     waterTaste.length < 1 ||
     bank.length < 1 ||
-    cardNumber >= 0;
+    cardNumber <= 0 ||
+    !captchaComplete;
+
+  $: disableCaptcha =
+    firstName.length < 1 ||
+    surname.length < 1 ||
+    age < 0 ||
+    age === null ||
+    dateOfBirthYear === null ||
+    gmail.length < 1 ||
+    iceCream.length < 1 ||
+    shower.length < 1 ||
+    finger < 1 ||
+    waterTaste.length < 1 ||
+    bank.length < 1 ||
+    cardNumber <= 0;
+
+  $: if (
+    firstName.length < 1 ||
+    surname.length < 1 ||
+    age < 0 ||
+    age === null ||
+    dateOfBirthYear === null ||
+    gmail.length < 1 ||
+    iceCream.length < 1 ||
+    shower.length < 1 ||
+    finger < 1 ||
+    waterTaste.length < 1 ||
+    bank.length < 1 ||
+    cardNumber <= 0
+  ) {
+    notice = true;
+  }
 
   const dispatch = createEventDispatcher();
 </script>
@@ -55,8 +89,13 @@
 <div class="backdrop">
   <div class="modal">
     <header>Transfer money</header>
-    {#if showNotice}
-      <p>Please fill the required fields with appropriate inputs</p>
+    {#if showNotice && notice}
+      <p
+        in:fly={{ duration: 2000, x: -500, y: 0 }}
+        out:fly={{ duration: 2000, x: 500, y: 0 }}
+      >
+        Please fill the required fields with appropriate inputs
+      </p>
     {/if}
     <hr />
 
@@ -165,7 +204,7 @@
           >Funny bank card number
           <div class="requiredSymbol">*</div></label
         >
-        <input type="text" id="cardNumber" bind:value={cardNumber} />
+        <input type="number" id="cardNumber" bind:value={cardNumber} />
       </div>
     </div>
 
@@ -173,11 +212,16 @@
 
     <div class="grid-container">
       {#if !captchaComplete && !captchaLoading}
+        <div class="flex-infoText">
+          Please note that you can't transfer more money if you already have
+          enough for a game!
+        </div>
         <div class="flex-containerCaptcha">
           <label for="buttonRed">Complete the captcha</label>
           <button
             class="buttonCaptcha"
             id="buttonRed"
+            disabled={disableCaptcha}
             on:click={() => dispatch('captcha')}
           ></button>
         </div>
@@ -189,6 +233,10 @@
           <div class="requiredText">*Information required</div>
         </div>
       {:else if !captchaComplete && captchaLoading}
+        <div class="flex-infoText">
+          Please note that you can't transfer more money if you already have
+          enough for a game!
+        </div>
         <div class="flex-containerCaptcha">
           <label for="buttonYellow">Loading...</label>
           <button class="loading" id="buttonYellow" disabled={captchaLoading}
@@ -202,6 +250,10 @@
           <div class="requiredText">*Information required</div>
         </div>
       {:else if captchaComplete && !captchaLoading}
+        <div class="flex-infoText">
+          Please note that you can't transfer more money if you already have
+          enough for a game!
+        </div>
         <div class="flex-containerCaptcha">
           <label for="buttonGreen">✅Captcha completed</label>
           <button
@@ -239,6 +291,7 @@
 
   .modal {
     position: fixed;
+    margin: auto;
     top: 70px;
     left: 305px;
     width: 60%;
@@ -298,6 +351,13 @@
     width: 50px;
     height: 50px;
     background-color: red;
+  }
+
+  .buttonCaptcha:disabled {
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    cursor: default;
   }
 
   .loading {
@@ -362,6 +422,17 @@
     align-items: center;
     margin-right: 40px;
     margin-top: 10px;
+  }
+
+  .flex-infoText {
+    display: flex;
+    grid-column: 1;
+    justify-content: center;
+    align-items: center;
+    margin-left: 40px;
+    margin-top: 10px;
+    color: black;
+    border: 2.5px solid black;
   }
 
   .requiredText {
