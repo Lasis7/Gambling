@@ -25,3 +25,7 @@ Transitions: https://svelte.dev/docs/svelte-transition#slide
 Specific key press: https://teamtreehouse.com/community/how-do-i-make-an-event-happen-when-pressing-a-specific-key
 
 More help for detecting specific keypress: https://www.w3resource.com/javascript-exercises/event/javascript-event-handling-exercise-9.php
+
+Scroll bar for modals: https://stackoverflow.com/questions/25874001/how-to-put-scroll-bar-only-for-modal-body
+
+possibly a rest API: https://open-meteo.com/en/docs/metno-api#current=temperature_2m&hourly=&timezone=Europe%2FLondon
