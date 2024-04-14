@@ -1,6 +1,7 @@
 <script>
   import Heading from './lib/Heading.svelte';
   import Navbar from './lib/Navbar.svelte';
+  import Weather from './lib/Weather.svelte';
   import Modal from './lib/Modal.svelte';
   import Info from './lib/Info.svelte';
   import PrintNumber from './lib/PrintNumber.svelte';
@@ -23,6 +24,12 @@
   //------------------------------------
 
   let infoVisible = false;
+
+  //----------------------------------------
+  //VARIABLES RELATED TO: __Weather.svelte__
+  //----------------------------------------
+
+  let weatherVisible = false;
 
   //----------------------------------------------
   //VARIABLES RELATED TO: __TransferMoney.svelte__
@@ -49,9 +56,9 @@
   let notice = true;
   let captchaComplete = false;
 
-  //------------------------------------
+  //--------------------------------------
   //VARIABLES RELATED TO: __Modal.svelte__
-  //------------------------------------
+  //--------------------------------------
 
   let howManyClicked = 0;
   let modalVisible = false;
@@ -148,6 +155,14 @@
   //closes the info-modal
   const closeInfo = () => {
     infoVisible = false;
+  };
+
+  //----------------------------------------
+  //FUNCTIONS RELATED TO: __Weather.svelte__
+  //----------------------------------------
+
+  const showWeather = () => {
+    weatherVisible = true;
   };
 
   //----------------------------------------------
@@ -290,13 +305,27 @@
   <Navbar />
 
   <div class="container">
-    <div class="money">Balance: {balance}$</div>
-    <div class="moreMoney">
-      <button class="moreMoneyButton" on:click={moneyModalShow}
-        >Transfer money</button
-      >
+    <div class="weather-moneyContainer">
+      <div class="weatherItem">
+        <div class="weatherContainer">
+          <button class="weatherButton" on:click={showWeather}>Click me!</button
+          >
+        </div>
+      </div>
+      <div class="moneyItem">
+        <div class="money">Balance: {balance}$</div>
+        <div class="moreMoney">
+          <button class="moreMoneyButton" on:click={moneyModalShow}
+            >Transfer money</button
+          >
+        </div>
+      </div>
     </div>
   </div>
+
+  {#if weatherVisible}
+    <Weather />
+  {/if}
 
   {#if moneyModal}
     <TransferMoney
@@ -388,9 +417,22 @@
     <Navbar />
 
     <div class="container">
-      <div class="money">Balance: {balance}$</div>
-      <div class="moreMoney">
-        <button class="moreMoneyButton">Transfer money</button>
+      <div class="weather-moneyContainer">
+        <div class="weatherItem">
+          <div class="weatherContainer">
+            <button class="weatherButton" on:click={showWeather}
+              >Click me!</button
+            >
+          </div>
+        </div>
+        <div class="moneyItem">
+          <div class="money">Balance: {balance}$</div>
+          <div class="moreMoney">
+            <button class="moreMoneyButton" on:click={moneyModalShow}
+              >Transfer money</button
+            >
+          </div>
+        </div>
       </div>
     </div>
 
@@ -432,6 +474,20 @@
 {/if}
 
 <style>
+  .weatherContainer {
+    display: flex;
+    justify-content: left;
+    align-content: flex-start;
+  }
+
+  .weatherButton {
+    font-size: 1.3rem;
+    color: rgb(64, 61, 61);
+    background-color: blanchedalmond;
+    margin-top: 10px;
+    font-size: 0.76rem;
+  }
+
   .money {
     display: flex;
     justify-content: right;
@@ -452,7 +508,6 @@
   .moreMoneyButton {
     display: flex;
     font-size: 1.3rem;
-    margin-bottom: 50px;
     color: rgb(64, 61, 61);
     background-color: blanchedalmond;
     margin-top: 0;
@@ -463,6 +518,7 @@
     border: solid 1px white;
     background-color: rgb(99, 97, 97);
     display: flex;
+    margin-top: 30px;
     justify-content: center;
   }
 
@@ -511,6 +567,22 @@
     margin-right: auto;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
+  }
+
+  .weather-moneyContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-bottom: 20px;
+  }
+
+  .weatherItem {
+    display: grid;
+    grid-column: 1;
+  }
+
+  .moneyItem {
+    display: grid;
+    grid-column: 3;
   }
 
   button:hover {
