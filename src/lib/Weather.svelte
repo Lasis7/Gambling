@@ -1,7 +1,7 @@
 <script>
   const europeWeather = async () => {
     const response = await fetch(
-      `https://api.open-meteo.com/v1/metno?latitude=59.91&longitude=10.75&current=temperature_2m&timezone=Europe%2FLondon`
+      `https://api.open-meteo.com/v1/metno?latitude=59.91&longitude=10.75&current=temperature_2m,relative_humidity_2m,precipitation,rain,showers,snowfall,weather_code,wind_speed_10m&timezone=Europe%2FLondon`
     );
     if (!response.ok) {
       throw new Error('Error in fetching the data!');
@@ -10,6 +10,10 @@
   };
 
   let weatherData = europeWeather();
+
+  import { createEventDispatcher } from 'svelte';
+
+  const dispatch = createEventDispatcher();
 </script>
 
 <div class="backdrop" />
@@ -21,14 +25,29 @@
       <p>&#40;Because why not&#41;</p>
       <hr />
       {#await weatherData}
-        <div>Loading....</div>
+        <div class="loading">Loading....</div>
       {:then responseWeather}
-        {#each responseWeather as weather}
-          {weather.latitude}
-        {/each}
+        <p>Timezone: {responseWeather.timezone}</p>
+        <p>Latitude: {responseWeather.latitude}</p>
+        <p>Longitude: {responseWeather.longitude}</p>
+        <p>Current time: {responseWeather.current.time}</p>
+        <p>Temperature: {responseWeather.current.temperature_2m}</p>
+        <p>
+          Wind speed &#40;10m&#41;: {responseWeather.current.wind_speed_10m}
+        </p>
+        <p>Relative humidity: {responseWeather.current.relative_humidity_2m}</p>
+        <p>Precipitation: {responseWeather.current.precipitation}</p>
+        <p>Rain: {responseWeather.current.rain}</p>
+        <p>Showers: {responseWeather.current.showers}</p>
+        <p>Snowfalls: {responseWeather.current.snowfall}</p>
+        <p>Weather code: {responseWeather.current.weather_code}</p>
       {:catch error}
         {error.message}
       {/await}
+      <hr />
+      <div class="closeWeather">
+        <button on:click={() => dispatch('closeWeather')}>Close</button>
+      </div>
     </div>
   </div>
 </div>
@@ -65,6 +84,18 @@
     overflow-y: auto;
   }
 
+  .closeWeather {
+    margin-top: 20px;
+    margin-right: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: right;
+  }
+
+  .loading {
+    color: black;
+  }
+
   header {
     color: black;
     font-size: 2em;
@@ -74,5 +105,9 @@
 
   p {
     color: black;
+  }
+
+  button:hover {
+    color: aqua;
   }
 </style>
