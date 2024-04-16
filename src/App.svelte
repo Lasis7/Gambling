@@ -15,7 +15,7 @@
   //VARIABLES RELATED TO: __App.svelte__
   //------------------------------------
 
-  let balance = 2;
+  let balance = 16;
   let gameOver = false;
   $: notEnoughMoney = balance < 4;
 
@@ -165,6 +165,9 @@
     weatherVisible = true;
   };
 
+  const closeWeather = () => {
+    weatherVisible = false;
+  };
   //----------------------------------------------
   //FUNCTIONS RELATED TO: __TransferMoney.svelte__
   //----------------------------------------------
@@ -324,7 +327,7 @@
   </div>
 
   {#if weatherVisible}
-    <Weather />
+    <Weather on:closeWeather={closeWeather} />
   {/if}
 
   {#if moneyModal}
