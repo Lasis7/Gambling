@@ -15,7 +15,7 @@
   //VARIABLES RELATED TO: __App.svelte__
   //------------------------------------
 
-  let balance = 16;
+  let balance = 2;
   let gameOver = false;
   $: notEnoughMoney = balance < 4;
 
@@ -303,7 +303,7 @@
 </script>
 
 {#if !captchaLoading}
-  <Heading heading="Pallokeno" />
+  <Heading heading="Ballgame©®℗™℠" />
 
   <Navbar />
 
@@ -476,6 +476,12 @@
   </div>
 {/if}
 
+<div class="container-norefund">
+  <div class="item-norefund">
+    Gaming is not a real solution to financial issues
+  </div>
+</div>
+
 <style>
   .weatherContainer {
     display: flex;
@@ -586,6 +592,19 @@
   .moneyItem {
     display: grid;
     grid-column: 3;
+  }
+
+  .container-norefund {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .item-norefund {
+    display: grid;
+    grid-column: 2;
+    justify-content: right;
+    color: red;
+    font-size: 0.5rem;
   }
 
   button:hover {
