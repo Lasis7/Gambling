@@ -7,18 +7,18 @@
   let numbers; //variable for storing the contents of guess store
 
   export let showNumber; //show next randomly generated number
-  export let howManyClicked;
+  export let howManyClicked; //check, when next number is disabled
   export let winOrLost; //winOrLost changes depending on the value of the randomNumber-variable
   export let randomNumber; //randomly generated number, shown one by one
-  export let randomNumbers; //generated numbers are pushed here for the results-sceen
-  export let howMuchWon;
-  export let outcomeVisible;
-  export let showProfit;
+  export let randomNumbers; //generated numbers are pushed here for the results-screen
+  export let howMuchWon; //used for checking if you made profit or nah
+  export let outcomeVisible; //used for the window that shows result for each drawn number
+  export let showProfit; //is results screen visible
 
   $: nextNumberButton = howManyClicked >= 8;
-  $: didProfit = howMuchWon > 3;
-  $: noProfit = howMuchWon < 3;
-  $: brokeEven = howMuchWon === 3;
+  $: didProfit = howMuchWon > 4;
+  $: noProfit = howMuchWon < 4;
+  $: brokeEven = howMuchWon === 4;
 
   const dispatch = createEventDispatcher();
 
@@ -31,6 +31,7 @@
   });
 </script>
 
+<!--Numbers fly to the screen-->
 {#if showNumber && !showProfit}
   <div class="container">
     <div
@@ -43,6 +44,8 @@
   </div>
 {/if}
 
+<!--All numbers have been drawn, next number is disabled-->
+
 {#if !nextNumberButton && !showProfit}
   <div class="container">
     <button on:click={() => dispatch('nextNumber')}>Next number</button>
@@ -54,19 +57,23 @@
       <button on:click={() => dispatch('profit')}>Next</button>
     </div>
   </div>
+
+  <!--Results shown when you did profit-->
 {:else if nextNumberButton && showProfit && didProfit}
   <h1>Results</h1>
   <div class="scoreboard">
     Winnings: {howMuchWon}$
   </div>
   <div class="scoreboard">
-    Profit: <div class="profit">+{0 - 3 + howMuchWon}$</div>
+    Profit: <div class="profit">+{0 - 4 + howMuchWon}$</div>
   </div>
   <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
   <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
   <div class="next">
     <button on:click={() => dispatch('next')}>Next</button>
   </div>
+
+  <!--Results shown when you broke even-->
 {:else if nextNumberButton && showProfit && brokeEven}
   <h1>Results</h1>
   <div class="scoreboard">
@@ -80,13 +87,15 @@
   <div class="next">
     <button on:click={() => dispatch('next')}>Next</button>
   </div>
+
+  <!--Results shown when you lost money-->
 {:else if nextNumberButton && showProfit && noProfit}
   <h1>Results</h1>
   <div class="scoreboard">
     Winnings: {howMuchWon}$
   </div>
   <div class="scoreboard">
-    Profit: <div class="loss">-{3 - howMuchWon}$</div>
+    Profit: <div class="loss">-{4 - howMuchWon}$</div>
   </div>
   <div class="scoreboard">Your guesses: {numbers.join(', ')}</div>
   <div class="scoreboard">Drawn numbers: {randomNumbers.join(', ')}</div>
@@ -95,6 +104,7 @@
   </div>
 {/if}
 
+<!--The window that shows results for each drawn number-->
 {#if outcomeVisible && !showProfit}
   <div class="container">
     <div
@@ -112,12 +122,6 @@
     font-size: 3rem;
   }
 
-  .ball {
-    border: 1px solid white;
-    border-radius: 50px;
-    padding: 1rem;
-  }
-
   button {
     margin-top: 20px;
   }
@@ -129,6 +133,12 @@
   button:disabled {
     cursor: not-allowed;
     color: gray;
+  }
+
+  .ball {
+    border: 1px solid white;
+    border-radius: 50px;
+    padding: 1rem;
   }
 
   .next {

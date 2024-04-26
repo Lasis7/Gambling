@@ -14,16 +14,6 @@
 </div>
 
 <style>
-  .navItem {
-    background-color: root;
-    padding: 0.2em;
-    margin: 1px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
   button {
     background: none;
   }
@@ -37,5 +27,15 @@
     display: flex;
     justify-content: center;
     margin-bottom: 0;
+  }
+
+  .navItem {
+    background-color: root;
+    padding: 0.2em;
+    margin: 1px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
   }
 </style>

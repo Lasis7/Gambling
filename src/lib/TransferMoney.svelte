@@ -2,12 +2,14 @@
   import { createEventDispatcher } from 'svelte';
   import { fly } from 'svelte/transition';
 
+  //Captca states, not sure if notice is even needed
   export let captchaLoading;
   export let notice;
   export let captchaComplete;
 
   export let balance;
 
+  //Validations
   export let firstName = '';
   export let secondName = '';
   export let surname = '';
@@ -37,6 +39,7 @@
     !captchaComplete ||
     balance >= 3;
 
+  //makes notice text visible, if one of the fields is empty before captcha
   $: showNotice =
     firstName.length < 1 ||
     surname.length < 1 ||
@@ -52,6 +55,7 @@
     cardNumber <= 0 ||
     !captchaComplete;
 
+  //Clicking captcha first caused some unexpected problems, so it is disabled until other fields are filled
   $: disableCaptcha =
     firstName.length < 1 ||
     surname.length < 1 ||
@@ -66,6 +70,7 @@
     bank.length < 1 ||
     cardNumber <= 0;
 
+  //makes notice text visible, if one of the fields is empty after captcha
   $: if (
     firstName.length < 1 ||
     surname.length < 1 ||
@@ -279,6 +284,37 @@
 </div>
 
 <style>
+  header {
+    font-size: 3rem;
+    color: black;
+  }
+
+  p {
+    font-size: 1rem;
+    color: black;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: black;
+    font-weight: 500;
+  }
+
+  label {
+    color: black;
+    font-size: 0.8rem;
+    display: inline-block;
+    width: 100px;
+  }
+
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0;
+  }
+
   .backdrop {
     position: fixed;
     top: 0;
@@ -318,29 +354,6 @@
   .flex-item2 {
     flex-basis: 50%;
     margin-bottom: 10px;
-  }
-
-  header {
-    font-size: 3rem;
-    color: black;
-  }
-
-  p {
-    font-size: 1rem;
-    color: black;
-  }
-
-  h2 {
-    font-size: 1.8rem;
-    color: black;
-    font-weight: 500;
-  }
-
-  label {
-    color: black;
-    font-size: 0.8rem;
-    display: inline-block;
-    width: 100px;
   }
 
   .labelDob {

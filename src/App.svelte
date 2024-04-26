@@ -2,7 +2,7 @@
   import Heading from './lib/Heading.svelte';
   import Navbar from './lib/Navbar.svelte';
   import Weather from './lib/Weather.svelte';
-  import Modal from './lib/Modal.svelte';
+  import Modal from './lib/PlayModal.svelte';
   import Info from './lib/Info.svelte';
   import PrintNumber from './lib/PrintNumber.svelte';
   import TransferMoney from './lib/TransferMoney.svelte';
@@ -15,7 +15,7 @@
   //VARIABLES RELATED TO: __App.svelte__
   //------------------------------------
 
-  let balance = 2;
+  let balance = 16;
   let gameOver = false;
   $: notEnoughMoney = balance < 4;
 
@@ -29,6 +29,7 @@
   //VARIABLES RELATED TO: __Weather.svelte__
   //----------------------------------------
 
+  //visibility of weather modal
   let weatherVisible = false;
 
   //----------------------------------------------
@@ -57,15 +58,15 @@
   let captchaComplete = false;
 
   //--------------------------------------
-  //VARIABLES RELATED TO: __Modal.svelte__
+  //VARIABLES RELATED TO: __PlayModal.svelte__
   //--------------------------------------
 
   let howManyClicked = 0;
-  let modalVisible = false;
-  let modalClosed = false;
+  let playModalVisible = false;
+  let PlayModalClosed = false;
   let submits = 8;
 
-  $: isModalClosed = modalClosed;
+  $: isPlayModalClosed = PlayModalClosed;
 
   //------------------------------------
   //VARIABLES RELATED TO: __PrintNumber.svelte__
@@ -89,7 +90,7 @@
 
   //Cancel button in App.svelte
   const cancelApp = () => {
-    modalClosed = false;
+    PlayModalClosed = false;
     guess.set([]);
   };
 
@@ -101,7 +102,7 @@
 
   //What is visible after the game ends
   const gameEnded = () => {
-    isModalClosed = true;
+    isPlayModalClosed = true;
     numberDraw = true;
     gameOver = true;
   };
@@ -109,8 +110,8 @@
   //Takes you to the first view (aka main menu)
   const appMain = () => {
     guess.set([]);
-    modalVisible = false;
-    modalClosed = false;
+    playModalVisible = false;
+    PlayModalClosed = false;
     infoVisible = false;
     numberDraw = false;
     gameOver = false;
@@ -127,8 +128,8 @@
   //Opens the modal and starts a new game
   const playAgain = () => {
     guess.set([]);
-    modalVisible = true;
-    modalClosed = false;
+    playModalVisible = true;
+    PlayModalClosed = false;
     infoVisible = false;
     numberDraw = false;
     gameOver = false;
@@ -186,6 +187,7 @@
       captchaComplete = true;
     }, 3000);
 
+    //not sure if this is even needed xd
     setTimeout(() => {
       notice = false;
     }, 100);
@@ -233,7 +235,7 @@
 
   //Brings out the modal when you first press the play-button.
   const playStart = () => {
-    modalVisible = true;
+    playModalVisible = true;
   };
 
   /*
@@ -242,15 +244,15 @@
   */
   const modalClose = (ce) => {
     guess.set(ce.detail);
-    modalVisible = false;
-    modalClosed = true;
+    playModalVisible = false;
+    PlayModalClosed = true;
   };
 
   //Cancel button in modal
   const cancelModal = () => {
     guess.set([]);
-    modalVisible = false;
-    modalClosed = false;
+    playModalVisible = false;
+    PlayModalClosed = false;
   };
 
   //----------------------------------------
@@ -357,20 +359,20 @@
   <div class="container">
     <div class="view">
       <div class="insideView">
-        {#if !isModalClosed && !numberDraw && !gameOver}
+        {#if !isPlayModalClosed && !numberDraw && !gameOver}
           <div class="container">
             <div class="modalNotClosed">
               <button on:click={playStart}>Play</button>
               <button on:click={openInfo}>How to play?</button>
             </div>
           </div>
-        {:else if isModalClosed && !numberDraw && !gameOver}
+        {:else if isPlayModalClosed && !numberDraw && !gameOver}
           {#if notEnoughMoney}
             <div class="errorPlayButton">Not enough money!</div>
             <div class="errorPlayButton">Transfer money to play!</div>
           {/if}
           <div class="container">
-            <div class="modalClosed">
+            <div class="PlayModalClosed">
               <button on:click={numberPrint} disabled={notEnoughMoney}
                 >Start
                 <p class="cost">$4</p></button
@@ -378,7 +380,7 @@
               <button on:click={cancelApp}>Cancel</button>
             </div>
           </div>
-        {:else if isModalClosed && numberDraw && !gameOver}
+        {:else if isPlayModalClosed && numberDraw && !gameOver}
           <PrintNumber
             {howManyClicked}
             {showProfit}
@@ -392,7 +394,7 @@
             on:next={gameEnded}
             on:nextNumber={showNextNumber}
           />
-        {:else if isModalClosed && numberDraw && gameOver}
+        {:else if isPlayModalClosed && numberDraw && gameOver}
           <div class="container">
             <div class="gameOver">
               <button on:click={appMain}>Main</button>
@@ -408,12 +410,12 @@
     <Info on:close={closeInfo} />
   {/if}
 
-  {#if modalVisible}
+  {#if playModalVisible}
     <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
   {/if}
-  <!---->
+  <!--Capcha not loading-->
 {:else}
-  <!---->
+  <!--Captcha loading (cursor different)-->
   <div class="loading">
     <Heading heading="Pallokeno" />
 
@@ -483,6 +485,15 @@
 </div>
 
 <style>
+  button:hover {
+    color: aqua;
+  }
+
+  button:disabled {
+    color: rgb(103, 98, 98);
+    cursor: default;
+  }
+
   .weatherContainer {
     display: flex;
     justify-content: left;
@@ -535,7 +546,7 @@
     margin: 300px;
   }
 
-  .modalClosed {
+  .PlayModalClosed {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -605,14 +616,5 @@
     justify-content: right;
     color: red;
     font-size: 0.5rem;
-  }
-
-  button:hover {
-    color: aqua;
-  }
-
-  button:disabled {
-    color: rgb(103, 98, 98);
-    cursor: default;
   }
 </style>
