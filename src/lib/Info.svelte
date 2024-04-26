@@ -61,7 +61,7 @@
   }
 
   button:hover {
-    color: aqua;
+    color: rgb(218, 248, 46);
   }
 
   .backdrop {

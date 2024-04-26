@@ -94,6 +94,7 @@
 <div class="backdrop">
   <div class="modal">
     <header>Transfer money</header>
+    <!--this message is only shown in case any of the required fields is empty and/or captcha isn't completed -->
     {#if showNotice && notice}
       <p
         in:fly={{ duration: 2000, x: -500, y: 0 }}
@@ -305,6 +306,15 @@
     font-size: 0.8rem;
     display: inline-block;
     width: 100px;
+  }
+
+  button:hover {
+    color: rgb(218, 248, 46);
+  }
+
+  button:disabled {
+    color: gray;
+    cursor: not-allowed;
   }
 
   input[type='number']::-webkit-inner-spin-button,

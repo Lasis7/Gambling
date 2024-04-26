@@ -1,5 +1,5 @@
 <script>
-  let isDisabled = true;
+  export let isDisabled;
 
   const navBar = ['Blackjack', 'Roulette', 'Bingo', 'Pinball'];
 </script>

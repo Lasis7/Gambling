@@ -30,13 +30,14 @@
     }
   });
 
-  //array is what is already stored into the guessStore
+  //pushes the guessed number into the array and then sets the value of it back to null
   const count = () => {
     guessNumbers.push(guessNumber);
     submits--;
     guessNumber = null;
   };
 
+  //after the contents have been sent to App.svelte, the array is emptied again
   const guesses = (userGuesses) => {
     dispatch('confirm', userGuesses);
     guessNumbers = [];
@@ -110,7 +111,7 @@
   }
 
   button:hover {
-    color: aqua;
+    color: rgb(218, 248, 46);
   }
 
   input[type='number']::-webkit-inner-spin-button,

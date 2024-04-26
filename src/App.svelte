@@ -21,6 +21,12 @@
   $: moneyButtonDisabled = isPlayModalClosed && numberDraw && !gameOver;
 
   //------------------------------------
+  //VARIABLES RELATED TO: __NavBar.svelte__
+  //------------------------------------
+
+  let isDisabled = true;
+
+  //------------------------------------
   //VARIABLES RELATED TO: __Info.svelte__
   //------------------------------------
 
@@ -299,16 +305,17 @@
       winOrLost = 'You won nothing';
     }
     randomNumbers.push(randomNumber);
-    let yeah = await delay(1000);
+    await delay(1000);
     showNumber = true;
     outcomeVisible = true;
   };
 </script>
 
+<!--Captcha is not loading-->
 {#if !captchaLoading}
   <Heading heading="Ballgame©®℗™℠" />
 
-  <Navbar />
+  <Navbar {isDisabled} />
 
   <div class="container">
     <div class="weather-moneyContainer">
@@ -417,6 +424,12 @@
     </div>
   </div>
 
+  <div class="container-notSolution">
+    <div class="item-notSolution">
+      Gaming is not a real solution to financial issues
+    </div>
+  </div>
+
   {#if infoVisible}
     <Info on:close={closeInfo} />
   {/if}
@@ -430,7 +443,7 @@
   <div class="loading">
     <Heading heading="Ballgame©®℗™℠" />
 
-    <Navbar />
+    <Navbar {isDisabled} />
 
     <div class="container">
       <div class="weather-moneyContainer">
@@ -475,18 +488,14 @@
     <div class="container">
       <div class="view">
         <div class="insideView">
-          <!--view shows two buttons, "Play" & "How to play?". This is what you first see when you open the page"-->
           {#if !isPlayModalClosed && !numberDraw && !gameOver}
             <div class="container">
               <div class="modalNotClosed">
-                <button on:click={playStart}>Play</button>
-                <button on:click={openInfo}>How to play?</button>
+                <button>Play</button>
+                <button>How to play?</button>
               </div>
             </div>
-
-            <!--view shows two button, "start" & "cancel". This is after you have submitted you guesses-->
           {:else if isPlayModalClosed && !numberDraw && !gameOver}
-            <!--This is only visible, if you have less than 3$-->
             {#if notEnoughMoney}
               <div class="errorPlayButton">Not enough money!</div>
               <div class="errorPlayButton">Transfer money to play!</div>
@@ -500,9 +509,6 @@
                 <button on:click={cancelApp}>Cancel</button>
               </div>
             </div>
-
-            <!--Results screen was exited and now on screen there is two buttons once again, "Main" & "Play again". 
-        Game has ended-->
           {:else if isPlayModalClosed && numberDraw && gameOver}
             <div class="container">
               <div class="gameOver">
@@ -515,8 +521,8 @@
       </div>
     </div>
 
-    <div class="container-norefund">
-      <div class="item-norefund">
+    <div class="container-notSolution">
+      <div class="item-notSolution">
         Gaming is not a real solution to financial issues
       </div>
     </div>
@@ -525,7 +531,7 @@
 
 <style>
   button:hover {
-    color: aqua;
+    color: rgb(218, 248, 46);
   }
 
   button:disabled {
@@ -543,6 +549,14 @@
   .weatherButton {
     font-size: 1.3rem;
     color: rgb(64, 61, 61);
+    background-color: blanchedalmond;
+    margin-top: 10px;
+    font-size: 0.76rem;
+  }
+
+  .weatherButton:hover {
+    font-size: 1.3rem;
+    color: rgb(255, 111, 15);
     background-color: blanchedalmond;
     margin-top: 10px;
     font-size: 0.76rem;
@@ -569,6 +583,15 @@
     display: flex;
     font-size: 1.3rem;
     color: rgb(64, 61, 61);
+    background-color: blanchedalmond;
+    margin-top: 0;
+    font-size: 0.76rem;
+  }
+
+  .moreMoneyButton:hover {
+    display: flex;
+    font-size: 1.3rem;
+    color: rgb(255, 111, 15);
     background-color: blanchedalmond;
     margin-top: 0;
     font-size: 0.76rem;
@@ -645,12 +668,12 @@
     grid-column: 3;
   }
 
-  .container-norefund {
+  .container-notSolution {
     display: grid;
     grid-template-columns: 1fr 1fr;
   }
 
-  .item-norefund {
+  .item-notSolution {
     display: grid;
     grid-column: 2;
     justify-content: right;

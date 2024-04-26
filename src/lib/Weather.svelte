@@ -53,6 +53,21 @@
 </div>
 
 <style>
+  header {
+    color: black;
+    font-size: 2em;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+  p {
+    color: black;
+  }
+
+  button:hover {
+    color: rgb(218, 248, 46);
+  }
+
   .backdrop {
     position: fixed;
     top: 0;
@@ -94,20 +109,5 @@
 
   .loading {
     color: black;
-  }
-
-  header {
-    color: black;
-    font-size: 2em;
-    margin-left: 20px;
-    margin-top: 10px;
-  }
-
-  p {
-    color: black;
-  }
-
-  button:hover {
-    color: aqua;
   }
 </style>
