@@ -4,7 +4,17 @@ Lassi Lahtonen
 
 ## The name of the project
 
-The final project for the frontend basics -course. Name TBD.
+Ballgame
+
+## Basic functioning
+
+1. You click start
+2. You submit 8 numbers between 1-20 (can be repetitive numbers). Use enter for faster submitting!
+3. 8 random numbers are drawn. The box below will indicate whether you won or not
+4. Check your results on the results page!
+5. Play again if you want
+
+The app includes extra things like balance and bank system, weather in Europe -modal and tutorial for playing
 
 ## Sources
 
@@ -29,3 +39,14 @@ More help for detecting specific keypress: https://www.w3resource.com/javascript
 Scroll bar for modals: https://stackoverflow.com/questions/25874001/how-to-put-scroll-bar-only-for-modal-body
 
 Rest API: https://open-meteo.com/en/docs/metno-api#current=temperature_2m&hourly=&timezone=Europe%2FLondon
+
+Course materials (not publicly available)
+
+## Usage of AI
+
+I think I only used AI once or twice, and the only usage for it was for checking how to do a very specific styling in css.
+This was because I didn't know how to search info for them (since they were so specific).
+
+## Time used on making the project
+
+In total I believe I used around 40-50 hours on making the app in the span of a month.
