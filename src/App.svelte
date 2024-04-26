@@ -18,6 +18,7 @@
   let balance = 16;
   let gameOver = false;
   $: notEnoughMoney = balance < 4;
+  $: moneyButtonDisabled = isPlayModalClosed && numberDraw && !gameOver;
 
   //------------------------------------
   //VARIABLES RELATED TO: __Info.svelte__
@@ -320,8 +321,10 @@
       <div class="moneyItem">
         <div class="money">Balance: {balance}$</div>
         <div class="moreMoney">
-          <button class="moreMoneyButton" on:click={moneyModalShow}
-            >Transfer money</button
+          <button
+            class="moreMoneyButton"
+            on:click={moneyModalShow}
+            disabled={moneyButtonDisabled}>Transfer money</button
           >
         </div>
       </div>
@@ -359,6 +362,7 @@
   <div class="container">
     <div class="view">
       <div class="insideView">
+        <!--view shows two buttons, "Play" & "How to play?". This is what you first see when you open the page"-->
         {#if !isPlayModalClosed && !numberDraw && !gameOver}
           <div class="container">
             <div class="modalNotClosed">
@@ -366,7 +370,10 @@
               <button on:click={openInfo}>How to play?</button>
             </div>
           </div>
+
+          <!--view shows two button, "start" & "cancel". This is after you have submitted you guesses-->
         {:else if isPlayModalClosed && !numberDraw && !gameOver}
+          <!--This is only visible, if you have less than 3$-->
           {#if notEnoughMoney}
             <div class="errorPlayButton">Not enough money!</div>
             <div class="errorPlayButton">Transfer money to play!</div>
@@ -380,6 +387,8 @@
               <button on:click={cancelApp}>Cancel</button>
             </div>
           </div>
+
+          <!--Numbers start appearing on the screen. This is when the game has started (start button was clicked)-->
         {:else if isPlayModalClosed && numberDraw && !gameOver}
           <PrintNumber
             {howManyClicked}
@@ -394,6 +403,8 @@
             on:next={gameEnded}
             on:nextNumber={showNextNumber}
           />
+          <!--Results screen was exited and now on screen there is two buttons once again, "Main" & "Play again". 
+          Game has ended-->
         {:else if isPlayModalClosed && numberDraw && gameOver}
           <div class="container">
             <div class="gameOver">
@@ -413,11 +424,11 @@
   {#if playModalVisible}
     <Modal {submits} on:confirm={modalClose} on:cancel={cancelModal} />
   {/if}
-  <!--Capcha not loading-->
+
+  <!--Captcha loading (cursor different).  Only the necessary stuff is visible-->
 {:else}
-  <!--Captcha loading (cursor different)-->
   <div class="loading">
-    <Heading heading="Pallokeno" />
+    <Heading heading="Ballgame©®℗™℠" />
 
     <Navbar />
 
@@ -425,17 +436,13 @@
       <div class="weather-moneyContainer">
         <div class="weatherItem">
           <div class="weatherContainer">
-            <button class="weatherButton" on:click={showWeather}
-              >Click me!</button
-            >
+            <button class="weatherButton">Click me!</button>
           </div>
         </div>
         <div class="moneyItem">
           <div class="money">Balance: {balance}$</div>
           <div class="moreMoney">
-            <button class="moreMoneyButton" on:click={moneyModalShow}
-              >Transfer money</button
-            >
+            <button class="moreMoneyButton">Transfer money</button>
           </div>
         </div>
       </div>
@@ -445,6 +452,8 @@
       <TransferMoney
         {captchaLoading}
         {captchaComplete}
+        on:captcha={captchaCompleted}
+        on:confirm={transferMoney}
         on:cancel={cancelMoney}
         bind:firstName
         bind:secondName
@@ -466,23 +475,53 @@
     <div class="container">
       <div class="view">
         <div class="insideView">
-          <div class="container">
-            <div class="modalNotClosed">
-              <button>Play</button>
-              <button>How to play?</button>
+          <!--view shows two buttons, "Play" & "How to play?". This is what you first see when you open the page"-->
+          {#if !isPlayModalClosed && !numberDraw && !gameOver}
+            <div class="container">
+              <div class="modalNotClosed">
+                <button on:click={playStart}>Play</button>
+                <button on:click={openInfo}>How to play?</button>
+              </div>
             </div>
-          </div>
+
+            <!--view shows two button, "start" & "cancel". This is after you have submitted you guesses-->
+          {:else if isPlayModalClosed && !numberDraw && !gameOver}
+            <!--This is only visible, if you have less than 3$-->
+            {#if notEnoughMoney}
+              <div class="errorPlayButton">Not enough money!</div>
+              <div class="errorPlayButton">Transfer money to play!</div>
+            {/if}
+            <div class="container">
+              <div class="PlayModalClosed">
+                <button on:click={numberPrint} disabled={notEnoughMoney}
+                  >Start
+                  <p class="cost">$4</p></button
+                >
+                <button on:click={cancelApp}>Cancel</button>
+              </div>
+            </div>
+
+            <!--Results screen was exited and now on screen there is two buttons once again, "Main" & "Play again". 
+        Game has ended-->
+          {:else if isPlayModalClosed && numberDraw && gameOver}
+            <div class="container">
+              <div class="gameOver">
+                <button on:click={appMain}>Main</button>
+                <button on:click={playAgain}>Play again</button>
+              </div>
+            </div>
+          {/if}
         </div>
+      </div>
+    </div>
+
+    <div class="container-norefund">
+      <div class="item-norefund">
+        Gaming is not a real solution to financial issues
       </div>
     </div>
   </div>
 {/if}
-
-<div class="container-norefund">
-  <div class="item-norefund">
-    Gaming is not a real solution to financial issues
-  </div>
-</div>
 
 <style>
   button:hover {
@@ -492,6 +531,7 @@
   button:disabled {
     color: rgb(103, 98, 98);
     cursor: default;
+    background-color: rgb(57, 54, 54);
   }
 
   .weatherContainer {
